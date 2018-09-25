@@ -8,13 +8,14 @@ const service = axios.create({
   withCredentials: true
 })
 
-// respone 拦截器
+// response 拦截器
 service.interceptors.response.use(
   response => {
     return response.data
   },
   error => {
-    Toast('啊哦~请求出错了' + error)
+    Toast('啊哦~请求出错了')
+    console.error('请求出错', error)
     return Promise.reject(error)
   }
 )
