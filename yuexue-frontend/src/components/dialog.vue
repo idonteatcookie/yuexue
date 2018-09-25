@@ -23,7 +23,7 @@ export default {
     position: fixed;
     top: 0;
     bottom: 0;
-    background: #0000007d;
+    background-color: rgba(0, 0, 0, 0.5);
     left: 0;
     right: 0;
     .dialog-content {
