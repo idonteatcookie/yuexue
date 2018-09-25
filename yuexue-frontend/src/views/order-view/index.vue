@@ -29,7 +29,7 @@
 <script>
 import { queryCurrentOrders } from '@/api/order'
 import Toast from '@/components/toast'
-import { getInterval } from '@/utils'
+import { getInterval, smoothScrollTo } from '@/utils'
 
 export default {
   data() {
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     toTop() {
-      document.documentElement.scrollTop = document.body.scrollTop = 0
+      smoothScrollTo()
     },
     goDetail(id) {
       this.$router.push(`/order-view/order-detail/${id}`)
