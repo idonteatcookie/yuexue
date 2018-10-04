@@ -27,21 +27,21 @@ export function getInterval(dateString) {
 }
 
 export const smoothScrollTo = (x = 0, y = 0, timeout = 300) => {
-  let fps = 50,
-    f = 10,
-    curTime = new Date().getTime();
+  let fps = 50
+  let f = 10
+  let curTime = new Date().getTime()
 
   return new Promise(resolve => {
     let interval = window.setInterval(() => {
-      let dx = (x - window.scrollX) / f,
-        dy = (y - window.scrollY) / f;
+      let dx = (x - window.scrollX) / f
+      let dy = (y - window.scrollY) / f
 
       if (new Date().getTime() - curTime <= timeout) {
-        window.scrollTo(window.scrollX + dx, window.scrollY + dy);
+        window.scrollTo(window.scrollX + dx, window.scrollY + dy)
       } else {
         resolve()
-        window.clearInterval(interval);
+        window.clearInterval(interval)
       }
-    }, timeout / fps);
+    }, timeout / fps)
   })
 }

@@ -11,9 +11,14 @@ Vue.config.productionTip = false
 // 全局变量 userId
 let store = {
   userId: undefined,
+  loading: false,
   setUser(userId) {
     console.log('[store] userId = ' + userId)
     this.userId = userId
+  },
+  setLoading(loading) {
+    console.log('[store] loading = ' + loading)
+    this.loading = loading
   }
 }
 

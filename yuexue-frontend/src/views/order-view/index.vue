@@ -46,7 +46,9 @@ export default {
       this.$router.push(`/order-view/order-detail/${id}`)
     },
     fetch() {
+      this.$root.$data.setLoading(true)
       queryCurrentOrders({ search: this.search }).then(res => {
+        this.$root.$data.setLoading(false)
         if (res.success) {
           this.orderList = res.data
         } else {

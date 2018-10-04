@@ -3,19 +3,22 @@
     <app-header class="main-header"></app-header>
     <router-view class="main-content"/>
     <app-footer class="main-footer"></app-footer>
+    <Loading v-if="$root.$data.loading"></Loading>
   </div>
 </template>
 
 <script>
 import AppHeader from 'components/app-header.vue'
 import AppFooter from 'components/app-footer.vue'
+import Loading from 'components/loading.vue'
 import { getUser } from '@/api/user'
 
 export default {
   name: 'App',
   components: {
     AppHeader,
-    AppFooter
+    AppFooter,
+    Loading
   },
   methods: {
     /**
