@@ -97,8 +97,8 @@ function findOrderByOptions(options) {
     return orderModel.findOrderByOptions(options)
 }
 
-async function findCurrentOrders(search) {
-    return orderModel.findCurrentOrders(orderStatus.PUBLISHED_UNRECEIVED, search)
+async function findCurrentOrders(search, start, size) {
+    return orderModel.findCurrentOrders(orderStatus.PUBLISHED_UNRECEIVED, search, start, size)
 }
 
 module.exports = {

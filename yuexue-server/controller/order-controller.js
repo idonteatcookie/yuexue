@@ -257,9 +257,9 @@ async function queryOrder(ctx) {
 }
 
 async function findCurrentOrders(ctx) {
-    let { search } = ctx.request.body
+    let { search, start, size } = ctx.request.body
     try {
-        let result = await orderService.findCurrentOrders(search)
+        let result = await orderService.findCurrentOrders(search, start, size)
         ctx.body = {
             success: true,
             data: result

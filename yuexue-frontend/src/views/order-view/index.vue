@@ -16,6 +16,7 @@
               <span class="time">{{getInterval(item.createTime)}}</span>
             </div>
           </li>
+          <li class="loading" v-if="loading && !allLoaded">加载中...</li>
         </ul>
       </div>
       <div class="to-top">
@@ -35,7 +36,10 @@ export default {
   data() {
     return {
       orderList: [],
-      search: ''
+      search: '',
+      page: 1,
+      loading: false,
+      allLoaded: false
     }
   },
   methods: {
@@ -47,19 +51,49 @@ export default {
     },
     fetch() {
       this.$root.$data.setLoading(true)
-      queryCurrentOrders({ search: this.search }).then(res => {
+      queryCurrentOrders({ search: this.search, start: 1, size: 10 }).then(res => {
         this.$root.$data.setLoading(false)
         if (res.success) {
           this.orderList = res.data
+          this.page = 1
+          this.allLoaded = false
         } else {
           Toast(res.msg)
         }
       })
     },
+    getNextPage() {
+      this.loading = true
+      setTimeout(() => {
+        queryCurrentOrders({ search: this.search, start: this.page * 10, size: 10 }).then(res => {
+          if (res.success) {
+            if (res.data.length === 0) this.allLoaded = true
+            this.orderList = this.orderList.concat(res.data)
+            this.loading = false
+            this.page++
+          } else {
+            Toast(res.msg)
+          }
+        })
+      }, 1000)
+    },
+    onScroll() {
+      if (this.loading || this.allLoaded) return;
+      let top = document.documentElement.scrollTop || document.body.scrollTop // 滚动条在Y轴上的滚动距离
+      let vh = document.compatMode == 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight // 浏览器视口的高度
+      let height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) // 文档的总高度
+      if (top + vh >= height) { // 滚动到底部
+        this.getNextPage() // 如果已经滚到底了 获取数据
+      }
+    },
     getInterval
   },
   created() {
     this.fetch()
+    window.addEventListener('scroll', this.onScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.onScroll)
   }
 }
 </script>
@@ -89,6 +123,11 @@ export default {
         padding: 0 10px;
         line-height: 25px;
         border-bottom: 1px solid #e8e8e8;
+        &.loading {
+          line-height: 50px;
+          text-align: center;
+          color: #c7c7c7;
+        }
         .order-title {
           height: 50px;
           overflow: hidden;

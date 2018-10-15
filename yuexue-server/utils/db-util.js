@@ -56,7 +56,7 @@ function deleteDataById(table, id) {
     return query(sql, [table, id])
 }
 
-function findDataByOptions(table, options, sorts) {
+function findDataByOptions(table, options, sorts, limit) {
     let queryStr = ''
     for (let key in options) {
         queryStr += `${key} = '${options[key]}' AND `
@@ -64,10 +64,13 @@ function findDataByOptions(table, options, sorts) {
     if (queryStr) {
         queryStr = ' WHERE ' + queryStr.slice(0, -5)
     }
-    let sql = 'SELECT * FROM ??' + queryStr
+    let sql = ' SELECT * FROM ?? ' + queryStr
     if (sorts) {
         let sortStr = Object.keys(sorts).map(key => `${key} ${sorts[key]}`).join(',')
         sql += ' ORDER BY ' + sortStr
+    }
+    if (limit && limit.size) {
+        sql += ` LIMIT ${limit.start || 0}, limit.size `
     }
     return query(sql, [table])
 }
