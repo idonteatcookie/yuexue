@@ -46,6 +46,7 @@ async function modifyUser(user) {
         password: oldUser.password,
         age: user.age,
         gender: user.gender || gender.UNKNOWN,
+        email: user.email,
         tel: user.tel,
         wechat: user.wechat,
         qq: user.qq,
@@ -75,6 +76,7 @@ async function getUser(username, password) {
  */
 async function queryUserById(userId) {
     let result = await userModel.queryUserById(userId)
+    if (result) delete result.password // 不返回密码信息
     return result
 }
 

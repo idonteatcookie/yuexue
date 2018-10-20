@@ -27,6 +27,10 @@
         <span class="data">{{ userInfo.university }}</span>
       </li>
       <li>
+        <label>邮箱</label>
+        <span class="data">{{ userInfo.email }}</span>
+      </li>
+      <li>
         <label>电话</label>
         <span class="data">{{ userInfo.tel }}</span>
       </li>
@@ -141,7 +145,7 @@ export default {
   @import '../../styles/variables.scss';
   .user-info {
     background-color: $backColor;
-    padding-top: 18px;
+    padding: 18px 0;
     min-height: calc(100vh - 90px);
     .info-list, .history-list {
       background-color: #fff;

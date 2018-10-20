@@ -6,10 +6,11 @@ const CustomError = require('../utils/CustomError')
 const TEL_REG = /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/
 
 function _checkModifyUserInfo(user) {
-    let {id, username, gender, tel} = user
+    let {id, username, email, gender, tel} = user
     let errStr = ''
     if (!id) errStr += '[用户ID]为空;'
     if (!username) errStr += '[用户名]为空;'
+    if (!email) errStr += '[邮箱]为空;'
     if (!gender) errStr += '[用户性别]为空;'
     if (tel && !TEL_REG.test(tel)) errStr += '[用户电话号码]不合法'
     return errStr

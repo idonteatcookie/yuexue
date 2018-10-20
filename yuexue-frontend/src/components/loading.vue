@@ -1,12 +1,20 @@
 <template>
   <div class="yx-loading">
     <img src="../assets/loading.gif" alt="loading">
-    <span>Loading...</span>
+    <span>{{ this.content }}</span>
   </div>
 </template>
 
-export default {
-}
+<script>
+  export default {
+    props: {
+      content: {
+        type: String,
+        default: 'Loading...'
+      }
+    }
+  }
+</script>
 
 <style lang="scss">
 .yx-loading {

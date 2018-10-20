@@ -14,9 +14,11 @@
   </div>
 </template>
 
-export default {
+<script>
+  export default {
 
-}
+  }
+</script>
 
 <style lang="scss">
   .dialog-wrapper {

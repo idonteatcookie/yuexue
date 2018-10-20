@@ -31,6 +31,9 @@
           </select>
         </div>
         <div class="form-item">
+          <label>邮箱</label><input v-model="userInfo.email" type="text">
+        </div>
+        <div class="form-item">
           <label>手机号</label><input v-model="userInfo.tel" type="text"
                                    pattern="^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$"
                                      oninvalid="setCustomValidity('请输入正确的手机号');"/>
@@ -69,7 +72,6 @@ export default {
       this.$router.back()
     },
     submit(e) {
-      console.log(e)
       let { remark } = this.userInfo
       if (remark && remark.length > 100) return false
       modify(this.userInfo).then(res => {
