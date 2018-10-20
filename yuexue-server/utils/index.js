@@ -34,9 +34,17 @@ function md5(str) {
     return md5.digest('hex') // 十六进制输出
 }
 
+/**
+ * 获取一个随机密码 [0-9a-z]{12}
+ */
+function getRandomString() {
+    return Math.random().toString(36).substr(2)
+}
+
 module.exports = {
     camel2_,
     _2Camel,
     _2Camel4Arr,
-    md5
+    md5,
+    getRandomString
 }

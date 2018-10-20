@@ -12,5 +12,6 @@ const routers = router
     .get('/getUserInfo', userController.getUserInfo)
     .post('/modifyAvatar', userController.modifyAvatar)
     // .get('/getAvatar', userController.getAvatar)
+    .post('/resetUserPwd', userController.resetUserPwd)
 
 module.exports = routers

@@ -41,6 +41,18 @@ module.exports = {
     async createUser(ctx) {
         try {
             let data = ctx.request.body
+            let { username, email, password } = data
+            let errStr = ''
+            if (!username) errStr += '[用户名]为空;'
+            if (!email) errStr += '[邮箱]为空;'
+            if (!password) errStr += '[密码]为空;'
+            if (errStr) {
+                ctx.body = {
+                    success: false,
+                    msg: errStr
+                }
+                return
+            }
             let result = await userService.createUser(data)
             let userId = result.insertId
             // session 中保存登录状态
@@ -178,6 +190,35 @@ module.exports = {
             ctx.body = {
                 success: false,
                 msg: '上传失败'
+            }
+        }
+    },
+    async resetUserPwd(ctx) {
+        let { username } = ctx.request.body
+        let errStr = ''
+        if (!username) errStr += '[用户名]为空;'
+        if (errStr) {
+            ctx.body = {
+                success: false,
+                msg: errStr
+            }
+            return
+        }
+        try {
+            let result = await userService.resetUserPwd(username)
+            ctx.body = {
+                success: result,
+                msg: `重置密码${result ? '成功' : '失败'}`
+            }
+        } catch (e) {
+            if (e instanceof CustomError) {
+                ctx.body = e.toReturnVo()
+            } else {
+                console.error('重置用户密码出错：', e)
+                ctx.body = {
+                    success: false,
+                    msg: '重置用户密码失败'
+                }
             }
         }
     }

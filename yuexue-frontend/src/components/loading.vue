@@ -1,7 +1,7 @@
 <template>
   <div class="yx-loading">
     <img src="../assets/loading.gif" alt="loading">
-    <span>数据加载中...</span>
+    <span>Loading...</span>
   </div>
 </template>
 

@@ -1,7 +1,8 @@
 const userModel = require('../model/user-model')
 const orderModel = require('../model/order-model')
 const { gender, orderStatus } = require('../utils/constants')
-const { md5 } = require('../utils')
+const sendEmail = require('../utils/email-util')
+const { md5, getRandomString } = require('../utils')
 const CustomError = require('../utils/CustomError')
 
 /**
@@ -15,9 +16,9 @@ async function createUser(user) {
     if (result && result.length > 0) {
         throw new CustomError('用户名重复')
     }
-
     let _user = {
         username: user.username,
+        email: user.email,
         password: md5(user.password),
         gender: gender.UNKNOWN,
         age: 0
@@ -98,10 +99,40 @@ function getUserInfo(userId) {
     })
 }
 
+/**
+ * 重置密码 并给用户发送邮件
+ * @param username
+ * @returns {Promise.<T>}
+ */
+async function resetUserPwd(username) {
+    let user = await userModel.queryUserByName(username)
+    if (!user && !user.length) {
+        throw new CustomError('用户不存在')
+    }
+    user = user[0]
+    if (!user.email) {
+        throw new CustomError('用户邮箱为空')
+    }
+    // 保存到数据库和发邮件是两件事 要保持一致性...i dont know how to do it...qaq
+    let pwd = getRandomString()
+    let t = {...user, password: md5(pwd)}
+    console.log(JSON.stringify(t))
+    await userModel.updateUserById({...user, password: md5(pwd)})
+    return sendEmail(user.email, pwd)
+        .then(res => {
+            return true
+        })
+        .catch(async e => {
+            await userModel.updateUserById(user)
+            return false
+        })
+}
+
 module.exports = {
     createUser,
     getUser,
     queryUserById,
     modifyUser,
-    getUserInfo
+    getUserInfo,
+    resetUserPwd
 }

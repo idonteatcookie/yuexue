@@ -78,9 +78,9 @@ export default {
       }, 1000)
     },
     onScroll() {
-      if (this.loading || this.allLoaded) return;
+      if (this.loading || this.allLoaded) return
       let top = document.documentElement.scrollTop || document.body.scrollTop // 滚动条在Y轴上的滚动距离
-      let vh = document.compatMode == 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight // 浏览器视口的高度
+      let vh = document.compatMode === 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight // 浏览器视口的高度
       let height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) // 文档的总高度
       if (top + vh >= height) { // 滚动到底部
         this.getNextPage() // 如果已经滚到底了 获取数据
