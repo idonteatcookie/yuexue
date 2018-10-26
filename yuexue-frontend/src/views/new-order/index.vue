@@ -22,6 +22,7 @@
       <mt-datetime-picker
         ref="picker"
         type="date"
+        :startDate="new Date()"
         @confirm="handleConfirm">
       </mt-datetime-picker>
       <mt-button class="submit-btn" type="primary" @click="submit">提交</mt-button>

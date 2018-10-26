@@ -24,7 +24,7 @@
         </div>
         <div class="info-item">
           <label>时间:</label>
-          <span>{{ new Date(order.startTime).toLocaleDateString() }} ~ {{ new Date(order.endTime).toLocaleDateString() }}</span>
+          <span>{{ new Date(order.startTime).format("yyyy-MM-dd") }} ~ {{ new Date(order.endTime).format("yyyy-MM-dd") }}</span>
         </div>
         <div class="info-item">
           <label>地点:</label>
