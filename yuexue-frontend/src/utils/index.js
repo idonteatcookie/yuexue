@@ -23,7 +23,7 @@ export function getInterval(dateString) {
   if (interval < 3 * _1day) {
     return Math.floor(interval / _1day) + '天前'
   }
-  return date.toLocaleDateString()
+  return date.format("yyyy-MM-dd")
 }
 
 export const smoothScrollTo = (x = 0, y = 0, timeout = 300) => {
