@@ -1,5 +1,7 @@
 <template>
   <div class="user-info">
+    <mt-header fixed	 title="个人信息">
+    </mt-header>
     <ul class="info-list">
       <label for="upload" class="avatar">
         <input
@@ -60,6 +62,7 @@
     <button @click="modifyInfo">修改个人信息</button>
     <button @click="logout" class="logout">退出登录</button>
     <router-view></router-view>
+    <app-footer class="main-footer"></app-footer>
   </div>
 </template>
 
@@ -67,6 +70,7 @@
 import { deleteCookie } from '@/utils'
 import { logout, getUser, modifyAvatar } from '@/api/user'
 import Toast from '@/components/toast'
+import AppFooter from 'components/app-footer.vue'
 import { gender } from '@/constant'
 
 export default {
@@ -75,6 +79,9 @@ export default {
       userInfo: {},
       imgUrl: ''
     }
+  },
+  components: {
+    AppFooter
   },
   methods: {
     userCreated() {
@@ -144,9 +151,12 @@ export default {
 <style lang="scss" scoped>
   @import '../../styles/variables.scss';
   .user-info {
-    background-color: $backColor;
-    padding: 18px 0;
+    padding: 50px 0 50px;
     min-height: calc(100vh - 90px);
+    .mint-header {
+      background: #000;
+      height: 50px;
+    }
     .info-list, .history-list {
       background-color: #fff;
       padding: 0 10px;
@@ -155,9 +165,7 @@ export default {
         color: #131313;
         line-height: 41px;
         height: 40px;
-        &:not(:last-child) {
-          border-bottom: 1px solid #e4e4e4;
-        }
+        border-bottom: 1px solid #e4e4e4;
         display: flex;
         label {
           flex-grow: 1;

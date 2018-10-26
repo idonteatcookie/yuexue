@@ -1,5 +1,7 @@
 <template>
   <div class="order-view">
+    <mt-header fixed	title="邀约列表">
+    </mt-header>
     <template>
       <div class="search">
         <input @keyup.enter="fetch" v-model="search" type="text" placeholder="请输入查询内容">
@@ -24,12 +26,14 @@
       </div>
     </template>
     <router-view></router-view>
+    <app-footer class="main-footer"></app-footer>
   </div>
 </template>
 
 <script>
 import { queryCurrentOrders } from '@/api/order'
 import Toast from '@/components/toast'
+import AppFooter from 'components/app-footer.vue'
 import { getInterval, smoothScrollTo } from '@/utils'
 
 export default {
@@ -41,6 +45,9 @@ export default {
       loading: false,
       allLoaded: false
     }
+  },
+  components: {
+    AppFooter
   },
   methods: {
     toTop() {
@@ -100,11 +107,19 @@ export default {
 
 <style lang="scss">
   .order-view {
+    padding-bottom: 50px;
+    padding-top: 50px;
+    .mint-header {
+      background: #000;
+      height: 50px;
+    }
     .search {
-      height: 35px;
+      height: 50px;
       display: flex;
       border-bottom: 1px solid #e8e8e8;
       box-shadow: 0px 1px 1px 0px #f9f9f9;
+      padding: 10px 0 10px 10px;
+      background: #e6e6e6;
       input {
         height: 100%;
         flex-grow: 1;
@@ -113,7 +128,7 @@ export default {
       }
       i {
         font-size: 25px;
-        line-height: 35px;
+        line-height: 30px;
         margin: 0 5px;
       }
     }

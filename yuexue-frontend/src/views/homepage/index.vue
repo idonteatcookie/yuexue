@@ -1,5 +1,6 @@
 <template>
   <div class="homepage">
+    <app-header class="main-header"></app-header>
     <div class="text">
       <p>欢迎! {{ userInfo.username }}</p><br>
       <p>你已成功约学 <span class="count">{{ userInfo.ordersTotal }}</span> 次</p>
@@ -9,12 +10,15 @@
       <button @click="newOrder">约<span class="right-arrow">▶</span></button>
     </div>
     <router-view></router-view>
+    <app-footer class="main-footer"></app-footer>
   </div>
 </template>
 
 <script>
 import { getUserInfo } from 'api/user'
 import Toast from 'components/toast'
+import AppHeader from 'components/app-header.vue'
+import AppFooter from 'components/app-footer.vue'
 
 export default {
   data() {
@@ -34,6 +38,10 @@ export default {
         return '学神'
       }
     }
+  },
+  components: {
+    AppHeader,
+    AppFooter,
   },
   methods: {
     newOrder() {
@@ -59,7 +67,8 @@ export default {
 <style lang="scss">
 @import '../../styles/variables.scss';
 .homepage {
-  height: calc(100vh - 90px);
+  padding: 40px 0 50px;
+  height: 100vh;
   background-color: $backColor;
   .text {
     height: 70%;
