@@ -3,6 +3,10 @@ import App from './App'
 import router from './router'
 // import fastclick from 'fastclick'
 
+// 引入 MintUI 组件库
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+
 import './styles/index.scss'
 
 Vue.config.productionTip = false
@@ -21,6 +25,8 @@ let store = {
     this.loading = loading
   }
 }
+
+Vue.use(MintUI)
 
 /* eslint-disable no-new */
 new Vue({

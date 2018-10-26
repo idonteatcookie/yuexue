@@ -26,6 +26,7 @@ module.exports = {
     'space-before-function-paren': [2, 'never'],
     'no-multi-spaces': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'indent': 'off'
   }
 }
