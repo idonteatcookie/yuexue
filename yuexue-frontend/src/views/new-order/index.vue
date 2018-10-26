@@ -9,7 +9,7 @@
     <div class="order-form">
       <mt-field label="标题" type="textarea" rows="2" v-model="order.title"></mt-field>
       <mt-field label="城市" v-model="order.university"></mt-field>
-      <mt-field label="地点" @click.naive="openPicker()" v-model="order.location"></mt-field>
+      <mt-field label="地点" @click="openPicker()" v-model="order.location"></mt-field>
       <mt-cell title="开始时间">
         <span class="select-time">{{ order.startTime.format("yyyy-MM-dd") }}</span>
         <mt-button type="default" size="small" @click="openPicker('startTime')">选择</mt-button>
@@ -32,8 +32,8 @@
 
 <script>
 import { createOrder } from 'api/order'
-//import Toast from '@/components/toast'
-import { Toast } from 'mint-ui';
+// import Toast from '@/components/toast'
+import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
@@ -50,7 +50,7 @@ export default {
     },
     openPicker(field) {
       this.datePickerForField = field
-      this.$refs.picker.open();
+      this.$refs.picker.open()
     },
     isValid() {
       let { title, university, location, startTime, endTime, remark } = this.order
@@ -59,7 +59,7 @@ export default {
           message: '请填写标题',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
       if (title.length < 2 || title.length > 50) {
@@ -67,7 +67,7 @@ export default {
           message: '标题需在2-50个字符之间',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
       if (!university) {
@@ -75,7 +75,7 @@ export default {
           message: '请填写城市',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
       if (!location) {
@@ -83,7 +83,7 @@ export default {
           message: '请填写地点',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
       if (startTime > endTime) {
@@ -91,7 +91,7 @@ export default {
           message: '开始时间要小于结束时间',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
 
@@ -100,19 +100,19 @@ export default {
           message: '备注不能超过200个字符',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
-        });
+        })
         return false
       }
       return true
     },
     submit() {
-      if (!this.isValid()) return;
+      if (!this.isValid()) return
       let order = {
         title: this.order.title,
         university: this.order.university,
         location: this.order.location,
-        startTime: this.order.startTime.format("yyyy-MM-dd"),
-        endTime: this.order.endTime.format("yyyy-MM-dd")
+        startTime: this.order.startTime.format('yyyy-MM-dd'),
+        endTime: this.order.endTime.format('yyyy-MM-dd')
       }
       createOrder(order).then(res => {
         if (res.success) {
