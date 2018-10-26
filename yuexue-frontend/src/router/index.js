@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Homepage from 'views/homepage'
 import UserInfo from 'views/user-info'
-import OrderView from 'views/order-view'
+import OrderList from 'views/order-list'
 import Login from 'views/login'
 import NewOrder from 'views/new-order'
 import OrderDetail from 'views/order-detail'
@@ -37,8 +37,8 @@ export default new Router({
       ]
     },
     {
-      path: '/order-view',
-      component: OrderView,
+      path: '/order-list',
+      component: OrderList,
       children: [{
         path: 'order-detail/:orderId',
         component: OrderDetail

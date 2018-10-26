@@ -1,6 +1,6 @@
 <template>
   <div class="user-info">
-    <mt-header fixed	 title="个人信息">
+    <mt-header fixed title="个人信息">
     </mt-header>
     <ul class="info-list">
       <label for="upload" class="avatar">
@@ -153,10 +153,6 @@ export default {
   .user-info {
     padding: 50px 0 50px;
     min-height: calc(100vh - 90px);
-    .mint-header {
-      background: #000;
-      height: 50px;
-    }
     .info-list, .history-list {
       background-color: #fff;
       padding: 0 10px;

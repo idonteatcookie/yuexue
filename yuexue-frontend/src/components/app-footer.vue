@@ -3,7 +3,7 @@
     <router-link tag="div" class="tab-item" to="/homepage">
       <i class="iconfont icon-shouyefill tab-link"></i>
     </router-link>
-    <router-link tag="div" class="tab-item" to="/order-view">
+    <router-link tag="div" class="tab-item" to="/order-list">
       <i class="iconfont icon-listview tab-link"></i>
     </router-link>
     <router-link tag="div" class="tab-item" to="/user-info">

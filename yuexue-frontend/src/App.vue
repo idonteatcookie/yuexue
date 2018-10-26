@@ -11,6 +11,9 @@ import { getUser } from '@/api/user'
 
 export default {
   name: 'App',
+  components: {
+    Loading
+  },
   methods: {
     /**
      * 检查登录状态

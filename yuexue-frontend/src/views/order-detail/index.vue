@@ -1,10 +1,11 @@
 <template>
   <transition name="fade">
     <div class="order-detail">
-      <header class="order-detail-header">
-        <i class="iconfont icon-xitongfanhui" @click="back"></i>
-        <span>邀约详情</span>
-      </header>
+      <mt-header fixed title="邀约详情">
+        <router-link to="/order-list" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+      </mt-header>
       <div class="content">
         <div class="order-title">
           <h1 class="title">{{ order.title }}</h1>
@@ -186,7 +187,7 @@ export default {
         if (res.success) {
           Toast(res.msg)
           this.deleteDialog = false
-          this.$router.push('/order-view')
+          this.$router.push('/order-list')
         } else {
           Toast(res.msg)
         }
@@ -214,22 +215,8 @@ export default {
     z-index: 100;
     background-color: $backColor;
     color: #484848;
-    .order-detail-header {
-      height: 50px;
-      background-color: $themeColor;
-      color: #fff;
-      line-height: 50px;
-      font-size: 16px;
-      text-align: center;
-      position: relative;
-      border-bottom: 1px solid #fff;
-      i {
-        position: absolute;
-        left: 15px;
-      }
-    }
     .content {
-      padding: 0 20px;
+      padding: 50px 20px;
       .order-title {
         margin: 20px 0;
         .title {

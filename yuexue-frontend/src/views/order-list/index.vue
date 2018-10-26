@@ -1,6 +1,6 @@
 <template>
   <div class="order-view">
-    <mt-header fixed	title="邀约列表">
+    <mt-header fixed title="邀约列表">
     </mt-header>
     <template>
       <div class="search">
@@ -54,11 +54,11 @@ export default {
       smoothScrollTo()
     },
     goDetail(id) {
-      this.$router.push(`/order-view/order-detail/${id}`)
+      this.$router.push(`/order-list/order-detail/${id}`)
     },
     fetch() {
       this.$root.$data.setLoading(true)
-      queryCurrentOrders({ search: this.search, start: 1, size: 10 }).then(res => {
+      queryCurrentOrders({ search: this.search, start: 0, size: 10 }).then(res => {
         this.$root.$data.setLoading(false)
         if (res.success) {
           this.orderList = res.data

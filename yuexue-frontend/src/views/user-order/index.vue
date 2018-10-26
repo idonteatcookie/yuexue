@@ -1,10 +1,11 @@
 <template>
   <transition name="user-order-fade">
   <div class="user-order">
-    <header>
-      <i class="iconfont icon-xitongfanhui" @click="back"></i>
-      <span>我的邀约</span>
-    </header>
+    <mt-header fixed title="我的邀约">
+      <router-link to="/user-info" slot="left">
+        <mt-button icon="back"></mt-button>
+      </router-link>
+    </mt-header>
     <div class="order-list">
       <ul>
         <li @click="goDetail(item.id)" :key="index" v-for="(item, index) in orderList">
@@ -73,42 +74,8 @@ export default {
     background-color: #fff;
     color: #484848;
     overflow-y: auto;
-    padding-top: 50px;
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      background-color: $themeColor;
-      color: #fff;
-      line-height: 50px;
-      font-size: 16px;
-      text-align: center;
-      border-bottom: 1px solid #fff;
-      i {
-        position: absolute;
-        left: 15px;
-      }
-    }
-    .search {
-      height: 35px;
-      display: flex;
-      border-bottom: 1px solid #e8e8e8;
-      box-shadow: 0px 1px 1px 0px #f9f9f9;
-      input {
-        height: 100%;
-        flex-grow: 1;
-        border-right: 1px solid #f9f9f9;
-        padding: 10px;
-      }
-      i {
-        font-size: 25px;
-        line-height: 35px;
-        margin: 0 5px;
-      }
-    }
     .order-list {
+      padding-top: 50px;
       li {
         height: 75px;
         padding: 0 10px;

@@ -41,7 +41,7 @@ export default {
   },
   components: {
     AppHeader,
-    AppFooter,
+    AppFooter
   },
   methods: {
     newOrder() {
