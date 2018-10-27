@@ -2,16 +2,19 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const cors = require('koa2-cors')
 const session = require('koa-session')
-
+const static = require('koa-static')
 
 const routers = require('./router/index')
 const config = require('./config')
 const logger = require('./middleware/logger')
 const getAvatar = require('./middleware/getAvatar')
+const staticPath = './static'
 
 const app = new Koa()
 // 加密cookie的字符串
 app.keys = ['some secret hurr']
+// 配置前端文件
+app.use(static(__dirname + '/' +  staticPath))
 // session
 app.use(session(config.session, app))
 // 解决跨域问题

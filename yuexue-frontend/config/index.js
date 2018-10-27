@@ -45,11 +45,11 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../../yuexue-server/static/index.html'),
 
-    // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    // 打包路径
+    assetsRoot: path.resolve(__dirname, '../../yuexue-server/static'),
+    assetsSubDirectory: '.',
     assetsPublicPath: '/',
 
     /**
