@@ -159,12 +159,6 @@ export default {
       }
     }
   }
-  .form-invalid {
-    color: #ffbf1d;
-    .mint-toast-icon {
-      font-size: 24px;
-    }
-  }
   .slide-enter-active, .slide-leave-active {
     transition: all 0.3s;
   }

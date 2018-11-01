@@ -1,83 +1,118 @@
 <template>
   <transition name="modify-info-fade">
     <div class="modify-info">
-      <header>
-        <i class="iconfont icon-xitongfanhui" @click="back"></i>
-        <span>修改个人信息</span>
-      </header>
-      <form @submit="submit" target="myIframe">
-        <div class="form-item">
-          <label>昵称</label><input v-model="userInfo.username" type="text" required>
-        </div>
-        <div class="form-item">
-          <label>性别</label><select v-model="userInfo.gender">
-            <option value ="male">男</option>
-            <option value ="female">女</option>
-            <option value ="unknown">未知</option>
-          </select>
-        </div>
-        <div class="form-item">
-          <label>年龄</label><input
-            v-model.number="userInfo.age"
-            type="number"
-            placeholder="min: 3, max: 100"
-            min="3" max="100">
-        </div>
-        <div class="form-item">
-          <label>学校</label><select v-model="userInfo.university">
-            <option value="北京大学">北京大学</option>
-            <option value="清华大学">清华大学</option>
-            <option value="上海交通大学">上海交通大学</option>
-          </select>
-        </div>
-        <div class="form-item">
-          <label>邮箱</label><input v-model="userInfo.email" type="text">
-        </div>
-        <div class="form-item">
-          <label>手机号</label><input v-model="userInfo.tel" type="text"
-                                   pattern="^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$"
-                                     oninvalid="setCustomValidity('请输入正确的手机号');"/>
-        </div>
-        <div class="form-item">
-          <label>微信号</label><input v-model="userInfo.wechat" type="text">
-        </div>
-        <div class="form-item">
-          <label>QQ号</label><input v-model="userInfo.qq" type="text">
-        </div>
-        <div class="form-item textarea">
-          <label>备注</label><textarea v-model="userInfo.remark"></textarea>
-        </div>
-        <span class="error-tips" v-if="userInfo.remark && userInfo.remark.length > 100">备注不能超过100字</span>
-        <div class="form-item">
-          <button>确 定</button>
-        </div>
-      </form>
-      <iframe width="1px" height="1px" style="display: none;" id="myIframe" name="myIframe"></iframe>
+      <mt-header fixed title="修改个人信息">
+        <router-link to="/user-info" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+      </mt-header>
+      <div class="modify-info-form">
+        <mt-field label="昵称" v-model="userInfo.username"></mt-field>
+        <mt-cell title="性别" class="form-gender">
+          <span v-if="userInfo.gender === gender.UNKNOWN">未知</span>
+          <span v-if="userInfo.gender === gender.MALE">男</span>
+          <span v-if="userInfo.gender === gender.FEMALE">女</span>
+          <mt-button type="default" @click="genderActionVisible = true">选择</mt-button>
+        </mt-cell>
+        <mt-actionsheet
+          :actions="[
+            { name: '男', method: setValue.bind(null, 'gender', 'male') },
+            { name: '女', method: setValue.bind(null, 'gender', 'female') }
+          ]"
+          v-model="genderActionVisible">
+        </mt-actionsheet>
+        <mt-field label="年龄" v-model="userInfo.age" type="number"></mt-field>
+        <!-- 城市后面要改成可选项 -->
+        <mt-field label="城市" v-model="userInfo.university"></mt-field>
+        <mt-field label="邮箱" v-model="userInfo.email" type="email"></mt-field>
+        <mt-field label="手机号" v-model="userInfo.tel" type="tel"></mt-field>
+        <mt-field label="微信号" v-model="userInfo.wechat"></mt-field>
+        <mt-field label="QQ号" v-model="userInfo.qq" type="number"></mt-field>
+        <mt-field label="备注" v-model="userInfo.remark"></mt-field>
+        <mt-button class="submit-btn" type="primary" @click="submit">确 定</mt-button>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
 import { modify, getUser } from '@/api/user'
-import Toast from '@/components/toast'
+import MyToast from '@/components/toast'
+import { Toast } from 'mint-ui'
+import { gender } from '@/constant'
 
 export default {
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      genderActionVisible: false,
+      gender
     }
   },
   methods: {
+    setValue(field, val) {
+      this.userInfo[field] = val
+    },
     back() {
       this.$router.back()
     },
+    isValid() {
+      let { username, age, email, remark } = this.userInfo
+      if (!username) {
+        Toast({
+          message: '用户名不能为空',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (username.length < 3 && username.length > 20) {
+        Toast({
+          message: '用户名应该在3-20个字符之间',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (!age) {
+        Toast({
+          message: '年龄不能为空',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (age < 3 || age > 100) {
+        Toast({
+          message: '年龄应在3-100之间',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (!email) {
+        Toast({
+          message: '邮箱不能为空',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (remark && remark.length > 100) {
+        Toast({
+          message: '备注不能超过200个字符',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      return true
+    },
     submit(e) {
-      let { remark } = this.userInfo
-      if (remark && remark.length > 100) return false
+      if (!this.isValid()) return
       modify(this.userInfo).then(res => {
-        Toast(res.msg)
+        MyToast(res.msg)
       })
-      return false
     }
   },
   created() {
@@ -85,14 +120,14 @@ export default {
       if (res.success) {
         this.userInfo = res.data
       } else {
-        Toast(res.msg)
+        MyToast(res.msg)
       }
     })
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../../styles/variables.scss';
   .modify-info {
     position: fixed;
@@ -101,58 +136,32 @@ export default {
     left: 0;
     right: 0;
     z-index: 50;
-    background-color: $backColor;
+    background-color: #fff;
     color: #484848;
     overflow-y: auto;
-    padding-top: 50px;
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      background-color: $themeColor;
-      color: #fff;
-      line-height: 50px;
-      font-size: 16px;
-      text-align: center;
-      border-bottom: 1px solid #fff;
-      i {
-        position: absolute;
-        left: 15px;
+    padding: 50px 10px 0;
+    .modify-info-form {
+      .mint-cell-value {
+        input {
+          color: #888;
+        }
       }
-    }
-    .form-item {
-      height: 35px;
-      line-height: 35px;
-      font-size: 15px;
-      padding: 0 10px;
-      text-align: right;
-      display: flex;
-      margin: 10px 0;
-      &.textarea {
-        height: 50px;
+      .form-gender {
+        .mint-cell-title {
+          flex-grow: initial;
+          flex-basis: 105px;
+        }
+        .mint-cell-value {
+          flex-grow: 1;
+          span {
+            flex-grow: 1;
+          }
+        }
       }
-      label {
-        width: 60px;
-        margin-right: 10px;
-      }
-      input, textarea, select {
-        flex-grow: 1;
-        margin-right: 10px;
-        color: #666;
-      }
-      button {
+      .submit-btn {
+        margin-top: 10px;
         width: 100%;
-        font-size: 13px;
-        background-color: #5aaeff;
-        color: #fff;
       }
-    }
-    .error-tips {
-      color: #ff7f7f;
-      font-size: 12px;
-      margin-left: 80px;
     }
   }
   .modify-info-fade-enter-active, .modify-info-fade-leave-active {
