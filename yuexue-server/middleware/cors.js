@@ -2,7 +2,9 @@ module.exports = async (ctx, next) => {
     // 允许来自所有域名请求
     // ctx.set("Access-Control-Allow-Origin", "*");
     // 这样就能只允许 http://localhost:8080 这个域名的请求了
-    ctx.set("Access-Control-Allow-Origin", "http://localhost:8080");
+    // 允许所有域名的请求
+    let origin = ctx.header.origin
+    ctx.set("Access-Control-Allow-Origin", origin);
 
     // 设置所允许的HTTP请求方法
     ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
@@ -35,7 +37,7 @@ module.exports = async (ctx, next) => {
     */
     // 需要获取其他字段时，使用Access-Control-Expose-Headers，
     // getResponseHeader('myData')可以返回我们所需的值
-    ctx.set("Access-Control-Expose-Headers", "myData");
+    // ctx.set("Access-Control-Expose-Headers", "myData");
 
     await next();
 }
