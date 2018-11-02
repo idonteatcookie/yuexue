@@ -12,7 +12,7 @@ const staticPath = './static'
 
 const app = new Koa()
 // 加密cookie的字符串
-app.keys = ['some secret hurr']
+app.keys = config.keys
 // 配置前端文件
 app.use(static(__dirname + '/' +  staticPath))
 // session

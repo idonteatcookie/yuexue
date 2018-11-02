@@ -50,7 +50,7 @@ async function modifyUser(user) {
         tel: user.tel,
         wechat: user.wechat,
         qq: user.qq,
-        university: user.university,
+        city: user.city,
         remark: user.remark,
     }
 

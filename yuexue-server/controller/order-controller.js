@@ -16,8 +16,8 @@ function _checkCreateOrder(session, order) {
     if (!order.title) {
         errStr += '[标题]为空;'
     }
-    if (!order.university) {
-        errStr += '[学校]为空;'
+    if (!order.city) {
+        errStr += '[城市]为空;'
     }
     if (!order.startTime) {
         errStr += '[开始时间]为空;'
@@ -90,7 +90,7 @@ async function createOrder(ctx) {
     let order = {
         creatorId: ctx.session.userId,
         title: data.title,
-        university: data.university,
+        city: data.city,
         startTime: data.startTime,
         endTime: data.endTime,
         location: data.location,

@@ -25,8 +25,8 @@
         <span class="data">{{ userInfo.age }}</span>
       </li>
       <li>
-        <label>学校</label>
-        <span class="data">{{ userInfo.university }}</span>
+        <label>城市</label>
+        <span class="data">{{ userInfo.city }}</span>
       </li>
       <li>
         <label>邮箱</label>

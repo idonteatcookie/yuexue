@@ -7,9 +7,20 @@
       </router-link>
     </mt-header>
     <div class="order-form">
-      <mt-field label="标题" type="textarea" rows="2" v-model="order.title"></mt-field>
-      <mt-field label="城市" v-model="order.university"></mt-field>
-      <mt-field label="地点" @click="openPicker()" v-model="order.location"></mt-field>
+      <mt-field label="标题" v-model="order.title"></mt-field>
+      <mt-cell title="城市" class="form-ceil">
+        <span>{{ order.city }}</span>
+        <mt-button size="small" type="default" @click="cityPopupVisible = true">选择</mt-button>
+      </mt-cell>
+      <mt-popup
+        v-model="cityPopupVisible"
+        class="mint-popup"
+        position="bottom">
+        <mt-picker :slots="slots" @change="onValuesChange">
+        </mt-picker>
+        <mt-button size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
+      </mt-popup>
+      <mt-field label="地点" v-model="order.location"></mt-field>
       <mt-cell title="开始时间">
         <span class="select-time">{{ order.startTime.format("yyyy-MM-dd") }}</span>
         <mt-button type="default" size="small" @click="openPicker('startTime')">选择</mt-button>
@@ -33,7 +44,7 @@
 
 <script>
 import { createOrder } from 'api/order'
-// import Toast from '@/components/toast'
+import { province, city } from '@/utils/cityData'
 import { Toast } from 'mint-ui'
 export default {
   data() {
@@ -42,10 +53,37 @@ export default {
         startTime: new Date(),
         endTime: new Date()
       },
-      datePickerForField: ''
+      datePickerForField: '',
+      cityPopupVisible: false,
+      cityValues: ['北京市', '北京市'],
+      slots: [
+        {
+          flex: 1,
+          values: province,
+          className: 'slot1',
+          textAlign: 'right'
+        }, {
+          divider: true,
+          content: '-',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: city[province[0]],
+          className: 'slot3',
+          textAlign: 'left'
+        }
+      ]
     }
   },
   methods: {
+    selectCity() {
+      this.order.city = this.cityValues.join()
+      this.cityPopupVisible = false
+    },
+    onValuesChange(picker, values) {
+      picker.setSlotValues(1, city[values[0]])
+      this.cityValues = values
+    },
     handleConfirm(d) {
       this.order[this.datePickerForField] = d
     },
@@ -54,7 +92,7 @@ export default {
       this.$refs.picker.open()
     },
     isValid() {
-      let { title, university, location, startTime, endTime, remark } = this.order
+      let { title, city, location, startTime, endTime, remark } = this.order
       if (!title) {
         Toast({
           message: '请填写标题',
@@ -71,7 +109,7 @@ export default {
         })
         return false
       }
-      if (!university) {
+      if (!city) {
         Toast({
           message: '请填写城市',
           iconClass: 'iconfont icon-zhuyi',
@@ -110,7 +148,7 @@ export default {
       if (!this.isValid()) return
       let order = {
         title: this.order.title,
-        university: this.order.university,
+        city: this.order.city,
         location: this.order.location,
         startTime: this.order.startTime.format('yyyy-MM-dd'),
         endTime: this.order.endTime.format('yyyy-MM-dd')
@@ -144,11 +182,25 @@ export default {
     .order-form {
       padding: 60px 10px 0;
       height: 100vh;
+      /* 下面的css我自己也乱了.... */
       .mint-cell {
         margin-bottom: 10px;
       }
       .mint-field .mint-cell-title {
         width: 80px;
+      }
+      .mint-cell-value {
+        span {
+          font-size: 14px;
+          color: #888;
+        }
+        input, textarea {
+          font-size: 14px;
+          color: #888;
+        }
+        textarea {
+          resize: none;
+        }
       }
       .select-time {
         margin-right: 5px;
@@ -156,6 +208,24 @@ export default {
       .submit-btn {
         width: 100%;
         margin-top: 15px;
+      }
+      .form-ceil {
+        .mint-cell-title {
+          flex-grow: initial;
+          flex-basis: 80px;
+        }
+        .mint-cell-value {
+          flex-grow: 1;
+          font-size: 14px;
+          span {
+            flex-grow: 1;
+          }
+        }
+      }
+      .mint-popup {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
       }
     }
   }

@@ -10,7 +10,7 @@
         <div class="order-title">
           <h1 class="title">{{ order.title }}</h1>
           <div class="base-info">
-            <span class="university">{{ order.university }}</span>
+            <span class="city">{{ order.city }}</span>
             <span class="time">{{ getInterval(order.createTime) }}</span>
           </div>
         </div>
@@ -60,7 +60,7 @@
         </p>
         <p>
           <i class="iconfont icon-university" style="color: #2308ff"></i>
-          <span>{{ showUser.university }}</span>
+          <span>{{ showUser.city }}</span>
         </p>
         <p>
           <i class="iconfont icon-phone"></i>
