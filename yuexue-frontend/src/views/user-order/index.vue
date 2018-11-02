@@ -46,13 +46,15 @@ export default {
       this.$router.push('/user-info/user-order/order-detail/' + id)
     },
     fetch() {
+      this.$root.$data.setLoading(true)
       queryOrder(this.$route.query).then(res => {
+        this.$root.$data.setLoading(false)
         if (res.success) {
           this.orderList = res.data
         } else {
           Toast(res.msg)
         }
-      })
+      }).catch(e => this.$root.$data.setLoading(false))
     },
     getInterval
   },

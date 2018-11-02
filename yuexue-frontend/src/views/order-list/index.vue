@@ -67,6 +67,8 @@ export default {
         } else {
           Toast(res.msg)
         }
+      }).catch(e => {
+        this.$root.$data.setLoading(false)
       })
     },
     getNextPage() {
