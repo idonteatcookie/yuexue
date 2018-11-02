@@ -37,7 +37,4 @@ let city = {
   '澳门特别行政区': ['澳门特别行政区']
 }
 
-module.exports = {
-  province,
-  city
-}
+export { province, city }
