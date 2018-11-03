@@ -52,11 +52,11 @@
     <ul class="history-list">
       <li>
         <label>我发布的</label>
-        <span class="data" @click="userCreated()">&gt;</span>
+        <span class="data" @click="userCreated()">＞</span>
       </li>
       <li>
         <label>我接受的</label>
-        <span class="data" @click="userReceived()">&gt;</span>
+        <span class="data" @click="userReceived()">＞</span>
       </li>
     </ul>
     <button @click="modifyInfo">修改个人信息</button>
@@ -72,12 +72,14 @@ import { logout, getUser, modifyAvatar } from '@/api/user'
 import Toast from '@/components/toast'
 import AppFooter from 'components/app-footer.vue'
 import { gender } from '@/constant'
+import loading from '@/assets/loading.gif'
+
 
 export default {
   data() {
     return {
       userInfo: {},
-      imgUrl: ''
+      imgUrl: loading
     }
   },
   components: {
@@ -162,8 +164,10 @@ export default {
         color: #131313;
         line-height: 41px;
         height: 40px;
-        border-bottom: 1px solid #e4e4e4;
         display: flex;
+        &:not(:last-child) {
+          border-bottom: 1px solid #e4e4e4;
+        }
         label {
           flex-grow: 1;
           min-width: 60px;
@@ -198,6 +202,9 @@ export default {
     }
     .history-list {
       margin-top: 18px;
+      span {
+        padding: 0 10px;
+      }
     }
     button {
       width: 100%;
