@@ -39,7 +39,7 @@
         <mt-field label="手机号" v-model="userInfo.tel" type="tel"></mt-field>
         <mt-field label="微信号" v-model="userInfo.wechat"></mt-field>
         <mt-field label="QQ号" v-model="userInfo.qq" type="number"></mt-field>
-        <mt-field label="备注" v-model="userInfo.remark"></mt-field>
+        <mt-field label="备注" type="textarea" rows="3" v-model="userInfo.remark"></mt-field>
         <mt-button class="submit-btn" type="primary" @click="submit">确 定</mt-button>
       </div>
     </div>
@@ -52,6 +52,7 @@ import MyToast from '@/components/toast'
 import { Toast } from 'mint-ui'
 import { gender } from '@/constant'
 import { province, city } from '@/utils/cityData'
+import { commonRegex } from '@/utils'
 
 export default {
   data() {
@@ -96,7 +97,7 @@ export default {
       this.$router.back()
     },
     isValid() {
-      let { username, age, email, remark } = this.userInfo
+      let { username, age, tel, email, remark } = this.userInfo
       if (!username) {
         Toast({
           message: '用户名不能为空',
@@ -132,6 +133,22 @@ export default {
       if (!email) {
         Toast({
           message: '邮箱不能为空',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (email && !commonRegex.email.test(email)) {
+        Toast({
+          message: '请输入正确邮箱地址',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (tel && !commonRegex.tel.test(tel)) {
+        Toast({
+          message: '请输入合法的手机号',
           iconClass: 'iconfont icon-zhuyi',
           className: 'form-invalid'
         })
@@ -181,8 +198,9 @@ export default {
     padding: 50px 10px 0;
     .modify-info-form {
       .mint-cell-value {
-        input {
+        input, textarea {
           color: #888;
+          font-size: 14px;
         }
       }
       .form-ceil {

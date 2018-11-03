@@ -45,6 +45,14 @@ export const smoothScrollTo = (x = 0, y = 0, timeout = 300) => {
     }, timeout / fps)
   })
 }
+/*
+ * 常用正则
+ **/
+export const commonRegex = {
+  email: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+  tel: /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/
+}
+
 /**
  * 在 Date 原型链上添加时间格式化方法
  * @param fmt
