@@ -74,7 +74,6 @@ import AppFooter from 'components/app-footer.vue'
 import { gender } from '@/constant'
 import loading from '@/assets/loading.gif'
 
-
 export default {
   data() {
     return {

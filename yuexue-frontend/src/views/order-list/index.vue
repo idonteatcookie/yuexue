@@ -141,9 +141,11 @@ export default {
         line-height: 25px;
         border-bottom: 1px solid #e8e8e8;
         &.loading {
-          line-height: 50px;
+          height: 25px;
+          line-height: 25px;
           text-align: center;
           color: #c7c7c7;
+          border-bottom: none;
         }
         .order-title {
           height: 50px;
