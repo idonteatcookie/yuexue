@@ -17,11 +17,11 @@ let store = {
   user: undefined,
   loading: false,
   setUser(user) {
-    console.log('[store] username = ' + user.username)
+    // console.log('[store] username = ' + user.username)
     this.user = user
   },
   setLoading(loading) {
-    console.log('[store] loading = ' + loading)
+    // console.log('[store] loading = ' + loading)
     this.loading = loading
   }
 }

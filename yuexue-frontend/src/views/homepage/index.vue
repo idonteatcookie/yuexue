@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       userInfo: {},
-      unReadCnt: 1
+      unReadCnt: 0
     }
   },
   computed: {

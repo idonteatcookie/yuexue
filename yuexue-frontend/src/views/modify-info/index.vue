@@ -12,7 +12,7 @@
           <span v-if="userInfo.gender === gender.UNKNOWN">未知</span>
           <span v-if="userInfo.gender === gender.MALE">男</span>
           <span v-if="userInfo.gender === gender.FEMALE">女</span>
-          <mt-button size="small" type="default" @click="genderActionVisible = true">选择</mt-button>
+          <mt-button @click="genderActionVisible = true" plain>▶</mt-button>
         </mt-cell>
         <mt-actionsheet
           :actions="[
@@ -22,10 +22,9 @@
           v-model="genderActionVisible">
         </mt-actionsheet>
         <mt-field label="年龄" v-model="userInfo.age" type="number"></mt-field>
-        <!-- 城市后面要改成可选项 -->
         <mt-cell title="城市" class="form-ceil">
           <span>{{userInfo.city}}</span>
-          <mt-button size="small" type="default" @click="cityPopupVisible = true">选择</mt-button>
+          <mt-button @click="cityPopupVisible = true" plain>▶</mt-button>
         </mt-cell>
         <mt-popup
           v-model="cityPopupVisible"
@@ -212,10 +211,11 @@ export default {
           flex-grow: 1;
           span {
             flex-grow: 1;
-            font-size: 14px;
+            font-size: 12px;
           }
-          input {
-            font-size: 14px;
+          button {
+            border: none;
+            padding: 0;
           }
         }
       }

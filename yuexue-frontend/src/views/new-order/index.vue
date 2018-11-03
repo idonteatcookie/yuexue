@@ -217,8 +217,8 @@ export default {
         }
         .mint-cell-value {
           flex-grow: 1;
-          font-size: 14px;
           span {
+            font-size: 12px;
             flex-grow: 1;
           }
         }
