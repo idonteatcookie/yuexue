@@ -86,12 +86,13 @@ async function queryUserById(userId) {
  * @returns {Promise.<TResult>}
  */
 function getUserInfo(userId) {
-    let p1 = orderModel.findOrderByOptions({ creatorId: userId, status: orderStatus.PUBLISHED_RECEIVED })
+    let p1 = orderModel.findOrderByOptions({ creatorId: userId, status: orderStatus.RECEIVED_UNREAD })
+    let p4 = orderModel.findOrderByOptions({ creatorId: userId, status: orderStatus.RECEIVED_READ })
     let p2 = orderModel.findOrderByOptions({ receiverId: userId })
     let p3 = userModel.queryUserById(userId)
-    return Promise.all([p1, p2, p3]).then(res => {
+    return Promise.all([p1, p2, p3, p4]).then(res => {
         let user = res[2]
-        let ordersTotal = res[0].length + res[1].length
+        let ordersTotal = res[0].length + res[1].length + res[3].length
         let username = user.username
         return {
             ordersTotal,

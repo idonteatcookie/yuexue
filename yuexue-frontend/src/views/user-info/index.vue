@@ -153,6 +153,7 @@ export default {
   .user-info {
     padding: 50px 0 50px;
     min-height: calc(100vh - 90px);
+    background-color: $backColor;
     .info-list, .history-list {
       background-color: #fff;
       padding: 0 10px;

@@ -54,7 +54,8 @@ async function receiveOrder(order) {
     if (oldOrder.creatorId === order.receiverId) {
         throw new CustomError('不能接受自己的邀约')
     }
-    if (oldOrder.status == orderStatus.PUBLISHED_RECEIVED) {
+    if (oldOrder.status == orderStatus.RECEIVED_UNREAD ||
+        oldOrder.status == orderStatus.RECEIVED_READ) {
         throw new CustomError('订单已被其他人抢到啦')
     }
     if (oldOrder.status == orderStatus.PUBLISHED_REMOVED) {
@@ -67,7 +68,7 @@ async function receiveOrder(order) {
     oldOrder.receiverId = receiver.id
     oldOrder.receiverName = receiver.username
     oldOrder.receiveTime = new Date()
-    oldOrder.status = orderStatus.PUBLISHED_RECEIVED
+    oldOrder.status = orderStatus.RECEIVED_UNREAD
     let result = await orderModel.updateOrder(oldOrder)
     if (result && result.affectedRows) return true
     return false
@@ -78,12 +79,16 @@ async function receiveOrder(order) {
  * @param id
  * @returns {Promise.<boolean>}
  */
-async function deleteOrder(id) {
-    let order = await orderModel.queryOrderById(id)
+async function deleteOrder(userId, orderId) {
+    let order = await orderModel.queryOrderById(orderId)
     if (!order) {
         throw new CustomError('订单不存在')
     }
-    let result = await orderModel.deleteOrderById(id)
+    // 只能删除自己创建的订单
+    if (order.creatorId !== userId) {
+        throw new CustomError('删除订单不合法')
+    }
+    let result = await orderModel.deleteOrderById(orderId)
     if (result && result.affectedRows) return true
     return false
 }
@@ -101,11 +106,20 @@ async function findCurrentOrders(search, start, size) {
     return orderModel.findCurrentOrders(orderStatus.PUBLISHED_UNRECEIVED, search, start, size)
 }
 
+async function readAllUnreadOrder(userId) {
+    let user = await userModel.queryUserById(userId)
+    if (!user) {
+        throw new CustomError('用户不存在')
+    }
+    return orderModel.readAllUnreadOrder(userId)
+}
+
 module.exports = {
     createOrder,
     updateOrder,
     receiveOrder,
     deleteOrder,
     findOrderByOptions,
-    findCurrentOrders
+    findCurrentOrders,
+    readAllUnreadOrder
 }

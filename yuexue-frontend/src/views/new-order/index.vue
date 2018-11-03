@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       order: {
+        city: this.$root.$data.user && this.$root.$data.user.city,
         startTime: new Date(),
         endTime: new Date()
       },

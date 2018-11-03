@@ -212,9 +212,19 @@ async function deleteOrder(ctx) {
             success: false,
             msg: '[订单id]为空;'
         }
+        return
     }
+    let session = ctx.session
+    if (!session || !session.userId) {
+        ctx.body = {
+            success: false,
+            msg: '用户未登录'
+        }
+        return
+    }
+    let userId = session.userId
     try {
-        let result = await orderService.deleteOrder(data.id)
+        let result = await orderService.deleteOrder(userId, data.id)
         if (result) {
             ctx.body = {
                 success: true,
@@ -273,11 +283,36 @@ async function findCurrentOrders(ctx) {
     }
 }
 
+async function readAllUnreadOrder(ctx) {
+    let session = ctx.session
+    if (!session || !session.userId) {
+        ctx.body = {
+            success: false,
+            msg: '用户未登录'
+        }
+        return
+    }
+    let userId = session.userId
+    try {
+        await orderService.readAllUnreadOrder(userId)
+        ctx.body = {
+            success: true
+        }
+    } catch (e) {
+        console.error('全部已读失败: ', e)
+        ctx.body = {
+            success: false,
+            msg: '全部已读失败'
+        }
+    }
+}
+
 module.exports = {
     createOrder,
     updateOrder,
     receiveOrder,
     deleteOrder,
     queryOrder,
-    findCurrentOrders
+    findCurrentOrders,
+    readAllUnreadOrder
 }

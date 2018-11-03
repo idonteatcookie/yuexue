@@ -1,3 +1,4 @@
+const { orderStatus } = require('../utils/constants')
 const dbUtils = require('../utils/db-util')
 const { camel2_, _2Camel, _2Camel4Arr } = require('../utils')
 
@@ -55,6 +56,12 @@ async function findCurrentOrders(status, search, start, size) {
     return _2Camel4Arr(result)
 }
 
+async function readAllUnreadOrder(userId) {
+
+    let sql = ` UPDATE \`order\` SET status = ${ orderStatus.RECEIVED_READ } `
+                    + ` WHERE status = ${ orderStatus.RECEIVED_UNREAD } AND creator_id = ${userId} `
+    return dbUtils.query(sql)
+}
 
 module.exports = {
     createOrder,
@@ -62,5 +69,6 @@ module.exports = {
     updateOrder,
     deleteOrderById,
     findOrderByOptions,
-    findCurrentOrders
+    findCurrentOrders,
+    readAllUnreadOrder
 }

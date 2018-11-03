@@ -158,6 +158,7 @@ module.exports = {
                 data
             }
         } catch (e) {
+            console.log('获取用户信息出现异常：', e)
             ctx.body = {
                 success: false,
                 msg: '获取用户信息出现异常'

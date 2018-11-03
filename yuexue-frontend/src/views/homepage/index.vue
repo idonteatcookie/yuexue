@@ -1,6 +1,11 @@
 <template>
   <div class="homepage">
-    <app-header class="main-header"></app-header>
+    <mt-header fixed>
+      <img slot="left" class="logo" src="../../assets/yuexue.png">
+      <mt-button v-if="unReadCnt" slot="right" @click="seeUnreadMsg">
+        <mt-badge type="error">{{ unReadCnt > 99 ? '99+' : unReadCnt }}</mt-badge>
+      </mt-button>
+    </mt-header>
     <div class="text">
       <p>欢迎! {{ userInfo.username }}</p><br>
       <p>你已成功约学 <span class="count">{{ userInfo.ordersTotal }}</span> 次</p>
@@ -19,11 +24,15 @@ import { getUserInfo } from 'api/user'
 import Toast from 'components/toast'
 import AppHeader from 'components/app-header.vue'
 import AppFooter from 'components/app-footer.vue'
+import {queryOrder, readAllUnreadOrder} from '@/api/order'
+import { orderStatus } from '@/constant/index'
+import { MessageBox } from 'mint-ui'
 
 export default {
   data() {
     return {
-      userInfo: {}
+      userInfo: {},
+      unReadCnt: 1
     }
   },
   computed: {
@@ -44,6 +53,12 @@ export default {
     AppFooter
   },
   methods: {
+    seeUnreadMsg() {
+      MessageBox.alert(`你有 ${this.unReadCnt} 个邀约被人接受啦！可去个人中心查看详情`).then(() => {
+        this.unReadCnt = 0
+        readAllUnreadOrder()
+      })
+    },
     newOrder() {
       if (!this.userInfo.hasContactInfo) {
         Toast('请先填写至少一种联系方式才可以发起邀约')
@@ -56,6 +71,9 @@ export default {
     getUserInfo().then(res => {
       if (res.success) {
         this.userInfo = res.data
+        queryOrder({ creatorName: this.userInfo.username, status: orderStatus.RECEIVED_UNREAD }).then(res => {
+          this.unReadCnt = res.data.length
+        })
       } else {
         Toast(res.msg)
       }
@@ -67,9 +85,12 @@ export default {
 <style lang="scss">
 @import '../../styles/variables.scss';
 .homepage {
-  padding: 40px 0 50px;
+  padding: 50px 0 40px;
   height: 100vh;
-  background-color: $backColor;
+  .logo {
+    height: 26px;
+    margin: 12px 32px;
+  }
   .text {
     height: 70%;
     padding-top: 30%;

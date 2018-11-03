@@ -43,7 +43,7 @@ export default {
     getLoginUser() {
       getUser().then(res => {
         if (res.success) {
-          this.$root.$data.setUser(res.data.id)
+          this.$root.$data.setUser(res.data)
         }
       })
     }

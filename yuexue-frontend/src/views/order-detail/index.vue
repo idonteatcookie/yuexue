@@ -18,7 +18,7 @@
           <label>发起人:</label>
           <span @click="showUserDialog(order.creatorId, isReceiver)" class="username">{{ order.creatorName }}</span>
         </div>
-        <div class="info-item" v-if="order.status === orderStatus.PUBLISHED_RECEIVED">
+        <div class="info-item" v-if="order.status === orderStatus.RECEIVED_UNREAD || order.status === orderStatus.RECEIVED_READ">
           <label>应邀人:</label>
           <span @click="showUserDialog(order.receiverId, isCreator)" class="username">{{ order.receiverName }}</span>
         </div>
@@ -126,10 +126,12 @@ export default {
   },
   computed: {
     isCreator() {
-      return this.$root.$data.userId === this.order.creatorId
+      let id = this.$root.$data.user && this.$root.$data.user.id
+      return id === this.order.creatorId
     },
     isReceiver() {
-      return this.$root.$data.userId === this.order.receiverId
+      let id = this.$root.$data.user && this.$root.$data.user.id
+      return id === this.order.receiverId
     }
   },
   methods: {

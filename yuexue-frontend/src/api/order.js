@@ -31,10 +31,18 @@ export function queryCurrentOrders(data) {
     data
   })
 }
+
 export function deleteOrder(data) {
   return request({
     method: 'post',
     url: '/order/delete',
     data
+  })
+}
+
+export function readAllUnreadOrder() {
+  return request({
+    method: 'post',
+    url: '/order/readAllUnreadOrder'
   })
 }

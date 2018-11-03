@@ -10,5 +10,6 @@ const routers = router
   .post('/delete', orderController.deleteOrder)
   .post('/query', orderController.queryOrder)
   .post('/queryCurrentOrders', orderController.findCurrentOrders)
+  .post('/readAllUnreadOrder', orderController.readAllUnreadOrder)
 
 module.exports = routers
