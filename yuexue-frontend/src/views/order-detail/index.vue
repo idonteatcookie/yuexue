@@ -2,9 +2,7 @@
   <transition name="fade">
     <div class="order-detail">
       <mt-header fixed title="邀约详情">
-        <router-link to="/order-list" slot="left">
-          <mt-button icon="back"></mt-button>
-        </router-link>
+        <mt-button slot="left" icon="back" @click="back()"></mt-button>
       </mt-header>
       <div class="content">
         <div class="order-title">
