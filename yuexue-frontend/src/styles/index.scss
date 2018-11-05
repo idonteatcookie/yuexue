@@ -35,3 +35,10 @@ html, body {
     font-size: 24px;
   }
 }
+
+.v-enter-active, .v-leave-active {
+  transition: all 0.3s;
+}
+.v-enter, .v-leave-to {
+  transform: translateX(100%);
+}

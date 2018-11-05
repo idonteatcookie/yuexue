@@ -1,68 +1,70 @@
 <template>
   <div class="user-info">
-    <mt-header fixed title="个人信息">
-    </mt-header>
-    <ul class="info-list">
-      <label for="upload" class="avatar">
-        <input
-          id="upload"
-          ref="upload"
-          type="file"
-          accept="image/jpeg,image/jpg,image/png,image/gif"
-          @change="uploadAvatar">
-        <img :src="imgUrl">
-      </label>
-      <li>
-        <label>昵称</label>
-        <span class="data">{{ userInfo.username }}</span>
-      </li>
-      <li>
-        <label>性别</label>
-        <span class="data">{{ getGender(userInfo.gender) }}</span>
-      </li>
-      <li>
-        <label>年龄</label>
-        <span class="data">{{ userInfo.age }}</span>
-      </li>
-      <li>
-        <label>城市</label>
-        <span class="data">{{ userInfo.city }}</span>
-      </li>
-      <li>
-        <label>邮箱</label>
-        <span class="data">{{ userInfo.email }}</span>
-      </li>
-      <li>
-        <label>电话</label>
-        <span class="data">{{ userInfo.tel }}</span>
-      </li>
-      <li>
-        <label>微信号</label>
-        <span class="data">{{ userInfo.wechat }}</span>
-      </li>
-      <li>
-        <label>QQ号</label>
-        <span class="data">{{ userInfo.qq }}</span>
-      </li>
-      <li>
-        <label>备注</label>
-        <span class="data">{{ userInfo.remark }}</span>
-      </li>
-    </ul>
-    <ul class="history-list">
-      <li>
-        <label>我发布的</label>
-        <span class="data" @click="userCreated()">＞</span>
-      </li>
-      <li>
-        <label>我接受的</label>
-        <span class="data" @click="userReceived()">＞</span>
-      </li>
-    </ul>
-    <button @click="modifyInfo">修改个人信息</button>
-    <button @click="logout" class="logout">退出登录</button>
+    <template v-if="!childView">
+      <mt-header fixed title="个人信息">
+      </mt-header>
+      <ul class="info-list">
+        <label for="upload" class="avatar">
+          <input
+            id="upload"
+            ref="upload"
+            type="file"
+            accept="image/jpeg,image/jpg,image/png,image/gif"
+            @change="uploadAvatar">
+          <img :src="imgUrl">
+        </label>
+        <li>
+          <label>昵称</label>
+          <span class="data">{{ userInfo.username }}</span>
+        </li>
+        <li>
+          <label>性别</label>
+          <span class="data">{{ getGender(userInfo.gender) }}</span>
+        </li>
+        <li>
+          <label>年龄</label>
+          <span class="data">{{ userInfo.age }}</span>
+        </li>
+        <li>
+          <label>城市</label>
+          <span class="data">{{ userInfo.city }}</span>
+        </li>
+        <li>
+          <label>邮箱</label>
+          <span class="data">{{ userInfo.email }}</span>
+        </li>
+        <li>
+          <label>电话</label>
+          <span class="data">{{ userInfo.tel }}</span>
+        </li>
+        <li>
+          <label>微信号</label>
+          <span class="data">{{ userInfo.wechat }}</span>
+        </li>
+        <li>
+          <label>QQ号</label>
+          <span class="data">{{ userInfo.qq }}</span>
+        </li>
+        <li>
+          <label>备注</label>
+          <span class="data">{{ userInfo.remark }}</span>
+        </li>
+      </ul>
+      <ul class="history-list">
+        <li>
+          <label>我发布的</label>
+          <span class="data" @click="userCreated()">＞</span>
+        </li>
+        <li>
+          <label>我接受的</label>
+          <span class="data" @click="userReceived()">＞</span>
+        </li>
+      </ul>
+      <button @click="modifyInfo">修改个人信息</button>
+      <button @click="logout" class="logout">退出登录</button>
+      <app-footer class="main-footer"></app-footer>
+    </template>
     <router-view></router-view>
-    <app-footer class="main-footer"></app-footer>
   </div>
 </template>
 
@@ -78,7 +80,8 @@ export default {
   data() {
     return {
       userInfo: {},
-      imgUrl: loading
+      imgUrl: loading,
+      childView: false
     }
   },
   components: {
@@ -137,12 +140,19 @@ export default {
     }
   },
   created() {
+    if (this.$route.name !== 'userInfo') this.childView = true
     this.fetch()
   },
   watch: {
-    '$route'({ path }) {
-      if (path === '/user-info') {
-        this.fetch()
+    '$route': function(to, from) {
+      // 如果是从父页面跳转到子页面
+      if (from.name === 'userInfo') {
+        setTimeout(() => {
+          this.childView = true
+        }, 300)
+      } else if (to.name === 'userInfo') {
+        // 跳转回父页面
+        this.childView = false
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="order-view">
-    <mt-header fixed title="邀约列表">
-    </mt-header>
-    <template>
+    <template v-if="!childView">
+      <mt-header fixed title="邀约列表">
+      </mt-header>
       <div class="search">
         <input @keyup.enter="fetch" v-model="search" type="text" placeholder="请输入查询内容">
         <i @click="fetch" class="iconfont icon-sousuo"></i>
@@ -24,9 +24,11 @@
       <div class="to-top">
         <i class="iconfont icon-tabshouqi" @click="toTop"></i>
       </div>
+      <app-footer class="main-footer"></app-footer>
     </template>
-    <router-view></router-view>
-    <app-footer class="main-footer"></app-footer>
+    <transition>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -43,7 +45,8 @@ export default {
       search: '',
       page: 1,
       loading: false,
-      allLoaded: false
+      allLoaded: false,
+      childView: false
     }
   },
   components: {
@@ -98,11 +101,24 @@ export default {
     getInterval
   },
   created() {
+    if (this.$route.name !== 'orderList') this.childView = true
     this.fetch()
     window.addEventListener('scroll', this.onScroll)
   },
   destroyed() {
     window.removeEventListener('scroll', this.onScroll)
+  },
+  watch: {
+    '$route': function(to, from) {
+      // 如果是从父页面跳转到子页面
+      if (from.name === 'orderList') {
+        setTimeout(() => {
+          this.childView = true
+        }, 300)
+      } else {
+        this.childView = false
+      }
+    }
   }
 }
 </script>

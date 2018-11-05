@@ -1,29 +1,29 @@
 <template>
-  <transition name="user-order-fade">
-  <div class="user-order">
-    <mt-header fixed title="我的邀约">
-      <router-link to="/user-info" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
-    </mt-header>
-    <div class="order-list">
-      <ul>
-        <li @click="goDetail(item.id)" :key="index" v-for="(item, index) in orderList">
-          <div class="order-title">
-            <span>{{item.title}}</span>
-          </div>
-          <div class="order-secondary">
-            <span class="creator">{{item.creatorName}}</span>
-            <span class="time">{{getInterval(item.createTime)}}</span>
-          </div>
-        </li>
-      </ul>
+  <transition mode="in-out">
+    <div v-if="$route.name === 'userOrder'" class="user-order" key="userOrder">
+      <mt-header fixed title="我的邀约">
+        <router-link to="/user-info" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+      </mt-header>
+      <div class="order-list">
+        <ul>
+          <li @click="goDetail(item.id)" :key="index" v-for="(item, index) in orderList">
+            <div class="order-title">
+              <span>{{item.title}}</span>
+            </div>
+            <div class="order-secondary">
+              <span class="creator">{{item.creatorName}}</span>
+              <span class="time">{{getInterval(item.createTime)}}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="no-date" v-if="orderList.length === 0">
+        <img src="../../assets/no-date.png">
+      </div>
     </div>
-    <div class="no-date" v-if="orderList.length === 0">
-      <img src="../../assets/no-date.png">
-    </div>
-    <router-view></router-view>
-  </div>
+    <router-view v-else key="userOrderDetail"></router-view>
   </transition>
 </template>
 
@@ -119,11 +119,5 @@ export default {
         font-size: 32px;
       }
     }
-  }
-  .user-order-fade-enter-active, .user-order-fade-leave-active {
-    transition: all 0.3s;
-  }
-  .user-order-fade-enter, .user-order-fade-leave-to {
-    transform: translateX(100%);
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <transition name="modify-info-fade">
+  <transition>
     <div class="modify-info">
       <mt-header fixed title="修改个人信息">
         <router-link to="/user-info" slot="left">
@@ -229,11 +229,5 @@ export default {
       text-align: center;
       padding: 10px;
     }
-  }
-  .modify-info-fade-enter-active, .modify-info-fade-leave-active {
-    transition: all 0.3s;
-  }
-  .modify-info-fade-enter, .modify-info-fade-leave-to {
-    transform: translateX(100%);
   }
 </style>

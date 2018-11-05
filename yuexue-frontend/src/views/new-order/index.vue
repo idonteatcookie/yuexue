@@ -1,44 +1,44 @@
 <template>
-  <transition name="slide">
-  <div class="new-order">
-    <mt-header fixed title="发起邀约">
-      <router-link to="/homepage" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
-    </mt-header>
-    <div class="order-form">
-      <mt-field label="标题" v-model="order.title"></mt-field>
-      <mt-cell title="城市" class="form-ceil">
-        <span>{{ order.city }}</span>
-        <mt-button size="small" type="default" @click="cityPopupVisible = true">选择</mt-button>
-      </mt-cell>
-      <mt-popup
-        v-model="cityPopupVisible"
-        class="mint-popup"
-        position="bottom">
-        <mt-picker :slots="slots" @change="onValuesChange">
-        </mt-picker>
-        <mt-button size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
-      </mt-popup>
-      <mt-field label="地点" v-model="order.location"></mt-field>
-      <mt-cell title="开始时间">
-        <span class="select-time">{{ order.startTime.format("yyyy-MM-dd") }}</span>
-        <mt-button type="default" size="small" @click="openPicker('startTime')">选择</mt-button>
-      </mt-cell>
-      <mt-cell title="开始时间">
-        <span class="select-time">{{ order.endTime.format("yyyy-MM-dd") }}</span>
-        <mt-button type="default" size="small" @click="openPicker('endTime')">选择</mt-button>
-      </mt-cell>
-      <mt-field label="备注" type="textarea" rows="4" v-model="order.remark"></mt-field>
-      <mt-datetime-picker
-        ref="picker"
-        type="date"
-        :startDate="new Date()"
-        @confirm="handleConfirm">
-      </mt-datetime-picker>
-      <mt-button class="submit-btn" type="primary" @click="submit">提交</mt-button>
+  <transition>
+    <div class="new-order">
+      <mt-header fixed title="发起邀约">
+        <router-link to="/homepage" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+      </mt-header>
+      <div class="order-form">
+        <mt-field label="标题" v-model="order.title"></mt-field>
+        <mt-cell title="城市" class="form-ceil">
+          <span>{{ order.city }}</span>
+          <mt-button size="small" type="default" @click="cityPopupVisible = true">选择</mt-button>
+        </mt-cell>
+        <mt-popup
+          v-model="cityPopupVisible"
+          class="mint-popup"
+          position="bottom">
+          <mt-picker :slots="slots" @change="onValuesChange">
+          </mt-picker>
+          <mt-button size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
+        </mt-popup>
+        <mt-field label="地点" v-model="order.location"></mt-field>
+        <mt-cell title="开始时间">
+          <span class="select-time">{{ order.startTime.format("yyyy-MM-dd") }}</span>
+          <mt-button type="default" size="small" @click="openPicker('startTime')">选择</mt-button>
+        </mt-cell>
+        <mt-cell title="开始时间">
+          <span class="select-time">{{ order.endTime.format("yyyy-MM-dd") }}</span>
+          <mt-button type="default" size="small" @click="openPicker('endTime')">选择</mt-button>
+        </mt-cell>
+        <mt-field label="备注" type="textarea" rows="4" v-model="order.remark"></mt-field>
+        <mt-datetime-picker
+          ref="picker"
+          type="date"
+          :startDate="new Date()"
+          @confirm="handleConfirm">
+        </mt-datetime-picker>
+        <mt-button class="submit-btn" type="primary" @click="submit">提交</mt-button>
+      </div>
     </div>
-  </div>
   </transition>
 </template>
 
@@ -229,11 +229,5 @@ export default {
         padding: 10px;
       }
     }
-  }
-  .slide-enter-active, .slide-leave-active {
-    transition: all 0.3s;
-  }
-  .slide-enter, .slide-leave-to {
-    transform: translate3d(100%, 0, 0);
   }
 </style>
