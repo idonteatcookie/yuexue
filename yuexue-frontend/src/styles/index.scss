@@ -2,8 +2,8 @@
 @import './reset.scss';
 @import './iconfont.scss';
 
-#app {
-  position: relative;
+html, body {
+  height: 100%;
 }
 
 .main-header {
