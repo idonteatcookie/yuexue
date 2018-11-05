@@ -6,7 +6,7 @@ const CustomError = require('../utils/CustomError')
 const TEL_REG = /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/
 
 function _checkModifyUserInfo(user) {
-    let {id, username, email, gender, tel} = user
+    let { id, username, email, gender, tel } = user
     let errStr = ''
     if (!id) errStr += '[用户ID]为空;'
     if (!username) errStr += '[用户名]为空;'
@@ -42,11 +42,11 @@ module.exports = {
     async createUser(ctx) {
         try {
             let data = ctx.request.body
-            let { username, email, password } = data
+            let { pin, email, password } = data
             let errStr = ''
-            if (!username) errStr += '[用户名]为空;'
             if (!email) errStr += '[邮箱]为空;'
             if (!password) errStr += '[密码]为空;'
+            if (!pin) errStr += '[验证码]为空;'
             if (errStr) {
                 ctx.body = {
                     success: false,
@@ -54,7 +54,7 @@ module.exports = {
                 }
                 return
             }
-            let result = await userService.createUser(data)
+            let result = await userService.createUser(email, password, pin)
             let userId = result.insertId
             // session 中保存登录状态
             ctx.session.userId = userId
@@ -104,9 +104,9 @@ module.exports = {
     },
     async login(ctx) {
         let data = ctx.request.body
-        let { username, password } = data
+        let { email, password } = data
         let errStr = ''
-        if (!username) errStr += '[用户名]为空;'
+        if (!email) errStr += '[邮箱]为空;'
         if (!password) errStr += '[密码]为空;'
         if (errStr) {
             ctx.body = {
@@ -115,11 +115,11 @@ module.exports = {
             }
             return
         }
-        let result = await userService.getUser(username, password)
+        let result = await userService.getUser(email, password)
         if (result) {
             // 在 session 中保存登录状态
             ctx.session.userId = result.id
-            console.log(username + '登录...')
+            console.log(result.username + '登录...')
             ctx.body = {
                 success: true,
                 msg: '登录成功'
@@ -127,7 +127,7 @@ module.exports = {
         } else {
             ctx.body = {
                 success: false,
-                msg: '用户名或密码错误'
+                msg: '邮箱或密码错误'
             }
         }
     },
@@ -196,9 +196,11 @@ module.exports = {
         }
     },
     async resetUserPwd(ctx) {
-        let { username } = ctx.request.body
+        let { email, password, pin } = ctx.request.body
         let errStr = ''
-        if (!username) errStr += '[用户名]为空;'
+        if (!email) errStr += '[邮箱]为空;'
+        if (!password) errStr += '[密码]为空;'
+        if (!pin) errStr += '[验证码]为空;'
         if (errStr) {
             ctx.body = {
                 success: false,
@@ -207,10 +209,10 @@ module.exports = {
             return
         }
         try {
-            let result = await userService.resetUserPwd(username)
+            let result = await userService.resetUserPwd(email, password, pin)
             ctx.body = {
-                success: result,
-                msg: `重置密码${result ? '成功' : '失败'}`
+                success: true,
+                msg: `重置密码成功`
             }
         } catch (e) {
             if (e instanceof CustomError) {
@@ -220,6 +222,33 @@ module.exports = {
                 ctx.body = {
                     success: false,
                     msg: '重置用户密码失败'
+                }
+            }
+        }
+    },
+    async sendPinCode(ctx) {
+        let { email, isReset } = ctx.request.body
+        if (!email) {
+            ctx.body = {
+                success: false,
+                msg: '[邮箱]为空'
+            }
+            return
+        }
+        try {
+            await userService.sendPinCode(email, isReset)
+            ctx.body = {
+                success: true,
+                msg: `发送验证码成功`
+            }
+        } catch (e) {
+            if (e instanceof CustomError) {
+                ctx.body = e.toReturnVo()
+            } else {
+                console.error('发送验证码失败：', e)
+                ctx.body = {
+                    success: false,
+                    msg: `发送验证码失败`
                 }
             }
         }

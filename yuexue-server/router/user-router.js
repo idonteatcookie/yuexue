@@ -13,5 +13,6 @@ const routers = router
     .post('/modifyAvatar', userController.modifyAvatar)
     // .get('/getAvatar', userController.getAvatar)
     .post('/resetUserPwd', userController.resetUserPwd)
+    .post('/sendPinCode', userController.sendPinCode)
 
 module.exports = routers

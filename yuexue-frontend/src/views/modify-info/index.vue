@@ -34,10 +34,13 @@
           </mt-picker>
           <mt-button size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
         </mt-popup>
-        <mt-field label="邮箱" v-model="userInfo.email" type="email"></mt-field>
+        <!--<mt-field label="邮箱" v-model="userInfo.email" type="email"></mt-field>-->
         <mt-field label="手机号" v-model="userInfo.tel" type="tel"></mt-field>
         <mt-field label="微信号" v-model="userInfo.wechat"></mt-field>
         <mt-field label="QQ号" v-model="userInfo.qq" type="number"></mt-field>
+        <mt-field label="旧密码" v-model="userInfo.password" type="password"></mt-field>
+        <mt-field label="新密码" v-model="userInfo.newPassword" type="password"></mt-field>
+        <mt-field label="再次输入密码" v-model="newPasswordRepeat" type="password"></mt-field>
         <mt-field label="备注" type="textarea" rows="3" v-model="userInfo.remark"></mt-field>
         <mt-button class="submit-btn" type="primary" @click="submit">确 定</mt-button>
       </div>
@@ -57,6 +60,7 @@ export default {
   data() {
     return {
       userInfo: {},
+      newPasswordRepeat: '',
       genderActionVisible: false,
       gender,
       cityPopupVisible: false,
@@ -96,7 +100,7 @@ export default {
       this.$router.back()
     },
     isValid() {
-      let { username, age, tel, email, remark } = this.userInfo
+      let { username, age, tel, email, remark, password, newPassword } = this.userInfo
       if (!username) {
         Toast({
           message: '用户名不能为空',
@@ -160,6 +164,32 @@ export default {
           className: 'form-invalid'
         })
         return false
+      }
+      if (newPassword) {
+        if (!password) {
+          Toast({
+            message: '请输入原始密码',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
+        if (newPassword.length < 6) {
+          Toast({
+            message: '密码至少6个字符',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
+        if (newPassword !== this.newPasswordRepeat) {
+          Toast({
+            message: '两次输入密码不一致',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
       }
       return true
     },

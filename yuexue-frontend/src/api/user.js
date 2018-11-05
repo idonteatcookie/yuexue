@@ -57,12 +57,18 @@ export function modifyAvatar(file, userId) {
   })
 }
 
-export function resetUserPwd(username) {
-  let formData = new FormData()
-  formData.append('username', username)
+export function resetUserPwd(data) {
   return request({
     method: 'post',
     url: '/user/resetUserPwd',
-    data: formData
+    data
+  })
+}
+
+export function sendPinCode(data) {
+  return request({
+    method: 'post',
+    url: '/user/sendPinCode',
+    data
   })
 }

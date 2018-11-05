@@ -35,10 +35,10 @@ function md5(str) {
 }
 
 /**
- * 获取一个随机密码 [0-9a-z]{12}
+ * 获取一个随机密码 [0-9a-z]{n}
  */
-function getRandomString() {
-    return Math.random().toString(36).substr(2)
+function getRandomString(n) {
+    return Math.random().toString(36).substr(2, n)
 }
 
 module.exports = {

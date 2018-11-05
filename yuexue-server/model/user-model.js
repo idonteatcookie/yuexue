@@ -33,6 +33,17 @@ function queryUserByName(name) {
 }
 
 /**
+ * 根据 邮箱 查询用户 -> 邮箱是唯一的
+ * @param email
+ * @returns {*}
+ */
+async function queryUserByEmail(email) {
+    let sql = `SELECT * FROM user_info WHERE email = "${email}"`
+    let result = await dbUtils.query(sql)
+    return result && result[0]
+}
+
+/**
  * 根据 用户名和密码 查询用户
  * @param username
  * @param password
@@ -44,6 +55,12 @@ function queryUserByNameAndPwd(username, password) {
     return dbUtils.query(sql)
 }
 
+function queryUserByEmailAndPwd(email, password) {
+    let sql = `SELECT * FROM user_info WHERE 
+                email = "${email}" AND password = "${password}"`
+    return dbUtils.query(sql)
+}
+
 function updateUserById(user) {
     return dbUtils.updateDataById('user_info', user, user.id)
 }
@@ -52,6 +69,8 @@ module.exports = {
     createUser,
     queryUserById,
     queryUserByName,
+    queryUserByEmail,
     queryUserByNameAndPwd,
+    queryUserByEmailAndPwd,
     updateUserById
 }

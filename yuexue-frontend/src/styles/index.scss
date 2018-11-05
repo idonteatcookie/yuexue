@@ -32,7 +32,10 @@ html, body {
 .form-invalid {
   color: #ffbf1d;
   .mint-toast-icon {
-    font-size: 24px;
+    font-size: 22px;
+  }
+  .mint-toast-text {
+    font-size: 12px;
   }
 }
 

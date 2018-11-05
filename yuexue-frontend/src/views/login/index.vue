@@ -5,94 +5,97 @@
       <i class="iconfont icon-shouye" @click="back"></i>
     </header>
     <div class="user-form">
-      <p class="input"><input type="text" placeholder="用户名" v-model="username"></p>
-      <p v-if="this.type === 'register'" class="input"><input type="text" placeholder="邮箱" v-model="email"></p>
-      <p class="input"><input type="password" placeholder="密码（不少于6位）" v-model="password"></p>
-      <p v-if="this.type === 'register'" class="input password">
-        <input type="password" placeholder="再次输入密码" v-model="pwdRepeat">
-      </p>
-      <p v-if="password && pwdRepeat && password !== pwdRepeat" class="input-error">两次输入密码不一致</p>
-      <button v-if="this.type === 'login'" @click="login">登 录</button>
-      <button v-else @click="register">注 册</button>
+      <p class="input"><input type="text" placeholder="邮箱" v-model="email"></p>
+      <!-- 注册 -->
+      <template v-if="type === 'register'">
+        <p class="input"><input type="password" placeholder="密码（不少于6位）" v-model="password"></p>
+        <p class="input"><input type="password" placeholder="再次输入密码" v-model="pwdRepeat"></p>
+        <p class="input verification-code">
+          <input type="text" placeholder="验证码" v-model="pin">
+          <button @click="getPinCode">发送验证码</button>
+        </p>
+        <button class="submit-btn" @click="register">注 册</button>
+      </template>
+      <!-- 忘记密码 -->
+      <template v-else-if="this.type === 'forgetPwd'">
+        <p class="input"><input type="password" placeholder="新密码（不少于6位）" v-model="password"></p>
+        <p class="input"><input type="password" placeholder="再次输入密码" v-model="pwdRepeat"></p>
+        <p class="input verification-code">
+          <input type="text" placeholder="验证码" v-model="pin">
+          <button @click="getPinCode">发送验证码</button>
+        </p>
+        <button class="submit-btn" @click="resetPassword">重 置</button>
+      </template>
+      <!-- 登录 -->
+      <template v-else>
+        <p class="input"><input type="password" placeholder="密码" v-model="password"></p>
+        <button class="submit-btn" @click="login">登 录</button>
+      </template>
     </div>
     <div class="tips">
-      <span v-if="this.type === 'login'"  @click="forgetPwd">忘记密码？</span>
-      <span @click="changeType">
+      <span v-if="this.type === 'login'"  @click="type = 'forgetPwd'">忘记密码？</span>
+      <span @click="type = type === 'login' ? 'register' : 'login'">
         {{ this.type === 'login' ? '创建账户' : '已有账户' }}
       </span>
     </div>
-    <Dialog class="reset-password-dialog" v-show="dlgVis">
-      <div class="text">你的账号为 <span class="userId">{{username}}</span>，点击确定新密码将会发送至你的邮箱，确定重置密码吗？</div>
-      <template slot="footer">
-        <div class="btn-group">
-          <button class="ok" @click="resetPassword">确定</button>
-          <button class="cancel" @click="() => { this.dlgVis = false }">取消</button>
-        </div>
-      </template>
-    </Dialog>
   </div>
 </template>
 
 <script>
-import { login, register, resetUserPwd } from 'api/user'
-import Toast from 'components/toast'
-import Dialog from '@/components/dialog.vue'
+import { login, register, resetUserPwd, sendPinCode } from 'api/user'
+import { commonRegex } from '@/utils'
+import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
       type: 'login',
-      username: 'xiaoyi',
-      password: '123456',
-      email: 'xie_ym@qq.com',
+      password: '',
+      email: '',
       pwdRepeat: '',
-      dlgVis: false
+      pin: ''
     }
   },
   methods: {
     back() {
       this.$router.back()
     },
-    changeType() {
-      this.type = this.type === 'login' ? 'register' : 'login'
-    },
     login() {
-      let { username, password } = this.$data
-      if (username && password && password.length >= 6) {
-        let param = { username, password }
-        login(param).then(res => {
-          if (res.success) {
-            this.$router.push('/homepage')
-          } else {
-            Toast(res.msg)
-          }
-        }).catch(err => {
-          console.log('登录页面>发送请求-login()出错：', err)
-        })
-      }
+      if (!this._isValid()) return
+      login({ email: this.email, password: this.password }).then(res => {
+        if (res.success) {
+          this.$router.push('/homepage')
+        } else {
+          Toast({
+            message: res.msg,
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+        }
+      }).catch(err => {
+        console.log('登录页面>发送请求-login()出错：', err)
+      })
     },
     register() {
-      let { username, email, password, pwdRepeat } = this.$data
-      if (username && email && password && password.length >= 6 && pwdRepeat === password) {
-        let param = { username, email, password }
-        register(param).then(res => {
-          if (res.success) {
-            Toast(res.msg)
-            this.$router.push('/homepage')
-          } else {
-            Toast(res.msg)
-          }
-        }).catch(err => {
-          console.log('登录页面>发送请求-register()出错：', err)
-        })
-      }
+      if (!this._isValid()) return
+      register({ email: this.email, password: this.password, pin: this.pin }).then(res => {
+        if (res.success) {
+          Toast(res.msg)
+          this.$router.push('/homepage')
+        } else {
+          Toast(res.msg)
+        }
+      }).catch(err => {
+        console.log('登录页面>发送请求-register()出错：', err)
+      })
     },
     resetPassword() {
+      if (!this._isValid()) return
       this.$root.$data.setLoading(true)
-      resetUserPwd(this.username).then(res => {
+      resetUserPwd({ email: this.email, password: this.password, pin: this.pin }).then(res => {
         this.$root.$data.setLoading(false)
         if (res.success) {
           Toast(res.msg)
-          this.dlgVis = false
+          this.type = 'login'
         } else {
           Toast(res.msg)
         }
@@ -101,16 +104,83 @@ export default {
         console.log('登录页面>重置密码-resetPassword()出错：', err)
       })
     },
-    forgetPwd() {
-      if (!this.username) {
-        Toast('请输入用户名')
-      } else {
-        this.dlgVis = true
+    getPinCode() {
+      if (!this.email) {
+        Toast('请输入邮箱')
+        return
       }
+      this.$root.$data.setLoading(true)
+      sendPinCode({ email: this.email, isReset: this.type === 'forgetPwd' }).then(res => {
+        this.$root.$data.setLoading(false)
+        if (res.success) {
+          Toast('发送验证码成功，请到邮箱查看')
+        } else {
+          Toast(res.msg)
+        }
+      }).catch(err => {
+        this.$root.$data.setLoading(false)
+        console.log('登录页面>发送验证码-getPinCode()出错：', err)
+      })
+    },
+    _isValid() {
+      let email = this.email
+      let password = this.password
+      let pwdRepeat = this.pwdRepeat
+      let pin = this.pin
+      // 所有情况都需要校验
+      if (!email) {
+        Toast({
+          message: '请输入邮箱地址',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return false
+      }
+      if (email && !commonRegex.email.test(email)) {
+        Toast({
+          message: '请输入合法的邮箱地址',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return
+      }
+      if (!password) {
+        Toast({
+          message: '请输入密码',
+          iconClass: 'iconfont icon-zhuyi',
+          className: 'form-invalid'
+        })
+        return
+      }
+      // 注册时 或 忘记密码时 需要校验
+      if (this.type === 'register' || this.type === 'forgetPwd') {
+        if (password.length < 6) {
+          Toast({
+            message: '密码至少6个字符',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
+        if (password !== pwdRepeat) {
+          Toast({
+            message: '两次输入密码不一致',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
+        if (!pin) {
+          Toast({
+            message: '请输入验证码',
+            iconClass: 'iconfont icon-zhuyi',
+            className: 'form-invalid'
+          })
+          return false
+        }
+      }
+      return true
     }
-  },
-  components: {
-    Dialog
   }
 }
 </script>
@@ -145,15 +215,25 @@ export default {
         input {
           width: 100%;
           height: 100%;
-          background: #00000000;
+          background: transparent;
           border: none;
-          border-bottom: 1px #e4e4e4 solid;
-          font-size: 15px;
+          border-bottom: 2px #e4e4e4 solid;
+          font-size: 14px;
           &:focus {
             outline: none;
             border-bottom: 2px $themeColor solid;
           }
         }
+      }
+      .verification-code {
+        display: flex;
+         input {
+           width: 60%;
+         }
+         button {
+           width: 40%;
+           background: #e4e4e4;
+         }
       }
       .input-error {
         font-size: 12px;
@@ -161,7 +241,7 @@ export default {
         text-align: left;
         text-indent: 15%;
       }
-      button {
+      .submit-btn {
         color: #fff;
         width: 70%;
         background-color: #000;
@@ -183,21 +263,5 @@ export default {
       color: #888;
       margin: 0 auto;
     }
-    .reset-password-dialog {
-      line-height: 1.5;
-      .userId {
-        color: #2308ff;
-      }
-      button {
-        padding: 5px 10px;
-        border-radius: 5px;
-      }
-    }
-  }
-  .slide-enter-active, .slide-leave-active {
-    transition: all 0.3s;
-  }
-  .slide-enter, .slide-leave-to {
-    transform: translate3d(100%, 0, 0);
   }
 </style>

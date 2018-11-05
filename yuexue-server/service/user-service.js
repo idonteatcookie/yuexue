@@ -4,23 +4,27 @@ const { gender, orderStatus } = require('../utils/constants')
 const sendEmail = require('../utils/email-util')
 const { md5, getRandomString } = require('../utils')
 const CustomError = require('../utils/CustomError')
+const { getCacheItem, setCacheItem } = require('../utils/cache')
 
 /**
  * 新建用户
  * @param user
  * @returns {Promise.<*>}
  */
-async function createUser(user) {
-    // 用户名不能重复
-    let result = await userModel.queryUserByName(user.username)
-    if (result && result.length > 0) {
-        throw new CustomError('用户名重复')
+async function createUser(email, password, pin) {
+    // 邮箱不能重复
+    let result = await userModel.queryUserByEmail(email)
+    if (result) {
+        throw new CustomError('该邮箱已被注册')
+    }
+    if (getCacheItem(email) !== pin) {
+        throw new CustomError('验证码错误')
     }
     let _user = {
-        username: user.username,
-        email: user.email,
-        password: md5(user.password),
-        gender: gender.UNKNOWN,
+        username: email.substr(0, email.indexOf('@')), // 截取邮箱的前缀做用户名 (反正可以改是吧..
+        email: email,
+        password: md5(password),                    // 密码 md5 加密
+        gender: gender.UNKNOWN,                     // 性别设为未知
         age: 0
     }
     return userModel.createUser(_user)
@@ -40,10 +44,18 @@ async function modifyUser(user) {
     if (sameNameUser && sameNameUser.length > 1) {
         throw new CustomError('用户名重复')
     }
+
+    let password = oldUser.password
+    if (user.password && user.newPassword) {
+        if (md5(user.password) !== password) {
+            throw new CustomError('密码错误')
+        }
+        password = md5(user.newPassword)
+    }
     let _user = {
         id: user.id,
         username: user.username,
-        password: oldUser.password,
+        password,
         age: user.age,
         gender: user.gender || gender.UNKNOWN,
         email: user.email,
@@ -64,8 +76,8 @@ async function modifyUser(user) {
  * @param password
  * @returns {Promise.<boolean>}
  */
-async function getUser(username, password) {
-    let result = await userModel.queryUserByNameAndPwd(username, md5(password))
+async function getUser(email, password) {
+    let result = await userModel.queryUserByEmailAndPwd(email, md5(password))
     return result && result[0]
 }
 
@@ -103,32 +115,36 @@ function getUserInfo(userId) {
 }
 
 /**
- * 重置密码 并给用户发送邮件
+ * 重置密码
  * @param username
  * @returns {Promise.<T>}
  */
-async function resetUserPwd(username) {
-    let user = await userModel.queryUserByName(username)
-    if (!user && !user.length) {
+async function resetUserPwd(email, password, pin) {
+    let user = await userModel.queryUserByEmail(email)
+    if (!user) {
         throw new CustomError('用户不存在')
     }
-    user = user[0]
-    if (!user.email) {
-        throw new CustomError('用户邮箱为空')
+    if (getCacheItem(email) !== pin) {
+        throw new CustomError('验证码错误')
     }
-    // 保存到数据库和发邮件是两件事 要保持一致性...i dont know how to do it...qaq
-    let pwd = getRandomString()
-    let t = {...user, password: md5(pwd)}
-    console.log(JSON.stringify(t))
-    await userModel.updateUserById({...user, password: md5(pwd)})
-    return sendEmail(user.email, pwd)
-        .then(res => {
-            return true
-        })
-        .catch(async e => {
-            await userModel.updateUserById(user)
-            return false
-        })
+    userModel.updateUserById({...user, password: md5(password)})
+}
+
+/**
+ * 发送验证码到指定邮箱
+ * @param email
+ * @returns {Promise.<Promise.<T>|*>}
+ */
+async function sendPinCode(email, isReset) {
+    if (isReset) {
+        let user = await userModel.queryUserByEmail(email)
+        if (!user) {
+            throw new CustomError('该邮箱未被注册')
+        }
+    }
+    let pin = getRandomString(4)
+    setCacheItem(email, pin)
+    return sendEmail(email, pin)
 }
 
 module.exports = {
@@ -137,5 +153,6 @@ module.exports = {
     queryUserById,
     modifyUser,
     getUserInfo,
-    resetUserPwd
+    resetUserPwd,
+    sendPinCode
 }
