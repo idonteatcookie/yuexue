@@ -53,11 +53,11 @@
       <ul class="history-list">
         <li>
           <label>我发布的</label>
-          <span class="data" @click="userCreated()">＞</span>
+          <span class="data" @click="userCreated()"><i class="iconfont icon-jiantouyou"></i></span>
         </li>
         <li>
           <label>我接受的</label>
-          <span class="data" @click="userReceived()">＞</span>
+          <span class="data" @click="userReceived()"><i class="iconfont icon-jiantouyou"></i></span>
         </li>
       </ul>
       <button @click="modifyInfo">修改个人信息</button>
@@ -211,9 +211,6 @@ export default {
     }
     .history-list {
       margin-top: 18px;
-      span {
-        padding: 0 10px;
-      }
     }
     button {
       width: 100%;

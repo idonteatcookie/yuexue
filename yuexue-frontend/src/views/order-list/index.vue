@@ -4,6 +4,15 @@
       <mt-header fixed title="邀约列表">
       </mt-header>
       <div class="search">
+        <i @click="cityPopupVisible = true" class="iconfont icon-dangdi"></i>
+        <span @click="cityPopupVisible = true" class="city">{{ city }}</span>
+        <mt-popup
+          v-model="cityPopupVisible"
+          position="right">
+          <mt-picker :slots="slots" @change="onValuesChange">
+          </mt-picker>
+          <mt-button type="primary" size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
+        </mt-popup>
         <input @keyup.enter="fetch" v-model="search" type="text" placeholder="请输入查询内容">
         <i @click="fetch" class="iconfont icon-sousuo"></i>
       </div>
@@ -37,6 +46,7 @@ import { queryCurrentOrders } from '@/api/order'
 import Toast from '@/components/toast'
 import AppFooter from 'components/app-footer.vue'
 import { getInterval, smoothScrollTo } from '@/utils'
+import { province, city } from '@/utils/cityData'
 
 export default {
   data() {
@@ -46,13 +56,50 @@ export default {
       page: 1,
       loading: false,
       allLoaded: false,
-      childView: false
+      childView: false,
+      city: (this.$root.$data.user && this.$root.$data.user.city) || '全部',
+      cityPopupVisible: false,
+      cityValues: ['北京市', '北京市'],
+      slots: [
+        {
+          flex: 1,
+          values: ['全部'].concat(province),
+          className: 'slot1',
+          textAlign: 'right'
+        }, {
+          divider: true,
+          content: '-',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: [],
+          className: 'slot3',
+          textAlign: 'left'
+        }
+      ]
     }
   },
   components: {
     AppFooter
   },
   methods: {
+    onValuesChange(picker, values) {
+      if (values[0] === '全部') {
+        picker.setSlotValues(1, [])
+      } else {
+        picker.setSlotValues(1, city[values[0]])
+      }
+      this.cityValues = values
+    },
+    selectCity() {
+      if (!this.cityValues[1]) {
+        this.city = this.cityValues[0]
+      } else {
+        this.city = this.cityValues.join()
+      }
+      this.cityPopupVisible = false
+      this.fetch()
+    },
     toTop() {
       smoothScrollTo()
     },
@@ -61,7 +108,8 @@ export default {
     },
     fetch() {
       this.$root.$data.setLoading(true)
-      queryCurrentOrders({ search: this.search, start: 0, size: 10 }).then(res => {
+      let city = this.city === '全部' ? '' : this.city
+      queryCurrentOrders({ search: this.search, city, start: 0, size: 10 }).then(res => {
         this.$root.$data.setLoading(false)
         if (res.success) {
           this.orderList = res.data
@@ -138,6 +186,7 @@ export default {
       box-shadow: 0px 1px 1px 0px #f9f9f9;
       padding: 10px 0 10px 10px;
       background: #e6e6e6;
+      line-height: 30px;
       input {
         height: 100%;
         flex-grow: 1;
@@ -145,9 +194,24 @@ export default {
         padding: 10px;
       }
       i {
-        font-size: 25px;
-        line-height: 30px;
+        font-size: 20px;
         margin: 0 5px;
+      }
+      .city {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        overflow: hidden;
+        font-size: 12px;
+        width: 100px;
+      }
+      .mint-popup-right {
+        height: 100%;
+        width: 80%;
+        padding: 100px 10px;
+        button {
+          width: 100%;
+        }
       }
     }
     .order-list {

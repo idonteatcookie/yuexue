@@ -56,7 +56,7 @@
         <span>{{ showUser.age }}岁</span>
       </p>
       <p>
-        <i class="iconfont icon-university" style="color: #2308ff"></i>
+        <i class="iconfont icon-dangdi" style="color: #2308ff"></i>
         <span>{{ showUser.city }}</span>
       </p>
       <p>

@@ -46,10 +46,13 @@ async function findOrderByOptions(options) {
     return _2Camel4Arr(result)
 }
 
-async function findCurrentOrders(status, search, start, size) {
+async function findCurrentOrders(status, search, city, start, size) {
     let sql = ` SELECT * FROM \`order\` WHERE status = ${status} `
     if (search) {
         sql += ` AND (title LIKE "%${search}%" OR location LIKE "%${search}%" OR remark LIKE "%${search}%") `
+    }
+    if (city) {
+        sql += ` AND city = "${city}" `
     }
     sql += ` ORDER BY create_time DESC LIMIT ${start}, ${size} `
     let result = await dbUtils.query(sql)
