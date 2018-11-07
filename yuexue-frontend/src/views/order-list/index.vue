@@ -9,6 +9,7 @@
         <mt-popup
           v-model="cityPopupVisible"
           position="right">
+          <mt-header fixed title="请选择邀约城市"></mt-header>
           <mt-picker :slots="slots" @change="onValuesChange">
           </mt-picker>
           <mt-button type="primary" size="small" class="submit-btn" @click="selectCity">确 定</mt-button>
@@ -209,6 +210,10 @@ export default {
         height: 100%;
         width: 80%;
         padding: 100px 10px;
+        .mint-header {
+          background: #16a0ff;
+          border-radius: 0 0 10px 10px;
+        }
         button {
           width: 100%;
         }

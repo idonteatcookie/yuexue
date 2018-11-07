@@ -12,7 +12,7 @@
           <span v-if="userInfo.gender === gender.UNKNOWN">未知</span>
           <span v-if="userInfo.gender === gender.MALE">男</span>
           <span v-if="userInfo.gender === gender.FEMALE">女</span>
-          <mt-button @click="genderActionVisible = true" plain>▶</mt-button>
+          <i class="iconfont icon-jiantouyou" @click="genderActionVisible = true"></i>
         </mt-cell>
         <mt-actionsheet
           :actions="[
@@ -24,7 +24,7 @@
         <mt-field label="年龄" v-model="userInfo.age" type="number"></mt-field>
         <mt-cell title="城市" class="form-ceil">
           <span>{{userInfo.city}}</span>
-          <mt-button @click="cityPopupVisible = true" plain>▶</mt-button>
+          <i class="iconfont icon-jiantouyou" @click="cityPopupVisible = true"></i>
         </mt-cell>
         <mt-popup
           v-model="cityPopupVisible"
