@@ -1,5 +1,5 @@
-const orderModel = require('../model/order-model')
-const userModel = require('../model/user-model')
+const orderModel = require('../model/order-model-sqlite')
+const userModel = require('../model/user-model-sqlite')
 const { orderStatus } = require('../utils/constants')
 const CustomError = require('../utils/CustomError')
 
@@ -16,9 +16,7 @@ async function createOrder(order) {
     order.creatorName = user.username
     order.createTime = order.updateTime = new Date();
     order.status = orderStatus.PUBLISHED_UNRECEIVED
-    let result = await orderModel.createOrder(order)
-    if (result && result.affectedRows) return true
-    return false
+    return orderModel.createOrder(order)
 }
 
 /**
@@ -36,9 +34,7 @@ async function updateOrder(order) {
     if (order.endTime) oldOrder.endTime = order.endTime
     if (order.location) oldOrder.location = order.location
     if (order.remark) oldOrder.remark = order.remark
-    let result = await orderModel.updateOrder(oldOrder)
-    if (result && result.affectedRows) return true
-    return false
+    return orderModel.updateOrderById(oldOrder)
 }
 
 /**
@@ -69,9 +65,7 @@ async function receiveOrder(order) {
     oldOrder.receiverName = receiver.username
     oldOrder.receiveTime = new Date()
     oldOrder.status = orderStatus.RECEIVED_UNREAD
-    let result = await orderModel.updateOrder(oldOrder)
-    if (result && result.affectedRows) return true
-    return false
+    return orderModel.updateOrderById(oldOrder)
 }
 
 /**
@@ -88,9 +82,7 @@ async function deleteOrder(userId, orderId) {
     if (order.creatorId !== userId) {
         throw new CustomError('删除订单不合法')
     }
-    let result = await orderModel.deleteOrderById(orderId)
-    if (result && result.affectedRows) return true
-    return false
+    return orderModel.deleteOrderById(orderId)
 }
 
 /**
@@ -103,7 +95,11 @@ function findOrderByOptions(options) {
 }
 
 async function findCurrentOrders(search, city, start, size) {
-    return orderModel.findCurrentOrders(orderStatus.PUBLISHED_UNRECEIVED, search, city, start, size)
+    let options = {
+        status: orderStatus.PUBLISHED_UNRECEIVED,
+        city
+    }
+    return orderModel.findOrderByOptions(options, search, start, size)
 }
 
 async function readAllUnreadOrder(userId) {

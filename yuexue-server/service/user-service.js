@@ -1,5 +1,5 @@
-const userModel = require('../model/user-model')
-const orderModel = require('../model/order-model')
+const userModel = require('../model/user-model-sqlite')
+const orderModel = require('../model/order-model-sqlite')
 const { gender, orderStatus } = require('../utils/constants')
 const sendEmail = require('../utils/email-util')
 const { md5, getRandomString } = require('../utils')
@@ -40,10 +40,6 @@ async function modifyUser(user) {
     if (!oldUser) {
         throw new CustomError('用户不存在')
     }
-    let sameNameUser = await userModel.queryUserByName(user.username)
-    if (sameNameUser && sameNameUser.length > 1) {
-        throw new CustomError('用户名重复')
-    }
 
     let password = oldUser.password
     if (user.password && user.newPassword) {
@@ -78,7 +74,7 @@ async function modifyUser(user) {
  */
 async function getUser(email, password) {
     let result = await userModel.queryUserByEmailAndPwd(email, md5(password))
-    return result && result[0]
+    return result
 }
 
 /**

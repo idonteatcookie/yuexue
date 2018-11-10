@@ -41,10 +41,22 @@ function getRandomString(n) {
     return Math.random().toString(36).substr(2, n)
 }
 
+/**
+ * 把一个对象的key都改成$key {k: 'v'} -> {$k: 'v'}
+ */
+function changeKey2$Key(obj) {
+    let _obj = {}
+    for (let key of Object.keys(obj)) {
+        _obj['$' + key] = obj[key]
+    }
+    return _obj
+}
+
 module.exports = {
     camel2_,
     _2Camel,
     _2Camel4Arr,
     md5,
-    getRandomString
+    getRandomString,
+    changeKey2$Key
 }

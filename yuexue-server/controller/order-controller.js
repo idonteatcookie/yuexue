@@ -97,17 +97,10 @@ async function createOrder(ctx) {
         remark: data.remark
     }
     try {
-        let result = await orderService.createOrder(order)
-        if (result) {
-            ctx.body = {
-                success: true,
-                msg: '创建邀约成功'
-            }
-        } else {
-            ctx.body = {
-                success: false,
-                msg: '创建邀约失败'
-            }
+        await orderService.createOrder(order)
+        ctx.body = {
+            success: true,
+            msg: '创建邀约成功'
         }
     } catch (e) {
         if (e instanceof CustomError) {
@@ -140,17 +133,10 @@ async function updateOrder(ctx) {
         remark: data.remark
     }
     try {
-        let result = await orderService.updateOrder(order)
-        if (result) {
-            ctx.body = {
-                success: true,
-                msg: '更新邀约成功'
-            }
-        } else {
-            ctx.body = {
-                success: false,
-                msg: '更新邀约失败'
-            }
+        await orderService.updateOrder(order)
+        ctx.body = {
+            success: true,
+            msg: '更新邀约成功'
         }
     } catch (e) {
         if (e instanceof CustomError) {
@@ -180,17 +166,10 @@ async function receiveOrder(ctx) {
         receiverId: ctx.session.userId
     }
     try {
-        let result = await orderService.receiveOrder(order)
-        if (result) {
-            ctx.body = {
-                success: true,
-                msg: '接受邀约成功'
-            }
-        } else {
-            ctx.body = {
-                success: false,
-                msg: '接受邀约失败'
-            }
+        await orderService.receiveOrder(order)
+        ctx.body = {
+            success: true,
+            msg: '接受邀约成功'
         }
     } catch (e) {
         if (e instanceof CustomError) {
@@ -224,17 +203,10 @@ async function deleteOrder(ctx) {
     }
     let userId = session.userId
     try {
-        let result = await orderService.deleteOrder(userId, data.id)
-        if (result) {
-            ctx.body = {
-                success: true,
-                msg: '删除订单成功'
-            }
-        } else {
-            ctx.body = {
-                success: false,
-                msg: '删除订单失败'
-            }
+        await orderService.deleteOrder(userId, data.id)
+        ctx.body = {
+            success: true,
+            msg: '删除订单成功'
         }
     } catch (e) {
         if (e instanceof CustomError) {
