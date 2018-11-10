@@ -1,5 +1,7 @@
 const orderService = require('../service/order-service')
 const CustomError = require('../utils/CustomError')
+const log4js = require('../utils/logger')
+const logger = log4js.getLogger('order-controller')
 
 const DATETIME_REG = /^(\d{4})(-|\/)(\d{2})\2(\d{2})$/
 /**
@@ -106,7 +108,7 @@ async function createOrder(ctx) {
         if (e instanceof CustomError) {
             ctx.body = e.toReturnVo()
         } else {
-            console.error('创建订单出错：', e)
+            logger.error('创建订单出错：', e)
             ctx.body = {
                 success: false,
                 msg: '创建邀约出现异常'
@@ -142,7 +144,7 @@ async function updateOrder(ctx) {
         if (e instanceof CustomError) {
             ctx.body = e.toReturnVo()
         } else {
-            console.error('修改订单出错：', e)
+            logger.error('修改订单出错：', e)
             ctx.body = {
                 success: false,
                 msg: '修改邀约出现异常'
@@ -175,7 +177,7 @@ async function receiveOrder(ctx) {
         if (e instanceof CustomError) {
             ctx.body = e.toReturnVo()
         } else {
-            console.error('接收订单出错：', e)
+            logger.error('接收订单出错：', e)
             ctx.body = {
                 success: false,
                 msg: '接受邀约出现异常'
@@ -212,7 +214,7 @@ async function deleteOrder(ctx) {
         if (e instanceof CustomError) {
             ctx.body = e.toReturnVo()
         } else {
-            console.error('删除订单出错：', e)
+            logger.error('删除订单出错：', e)
             ctx.body = {
                 success: false,
                 msg: '删除邀约出现异常'
@@ -230,7 +232,7 @@ async function queryOrder(ctx) {
             data: result
         }
     } catch (e) {
-        console.error('查询订单失败: ', e)
+        logger.error('查询订单失败: ', e)
         ctx.body = {
             success: false,
             msg: '获取邀约数据失败'
@@ -247,7 +249,7 @@ async function findCurrentOrders(ctx) {
             data: result
         }
     } catch (e) {
-        console.error('查询订单失败: ', e)
+        logger.error('查询订单失败: ', e)
         ctx.body = {
             success: false,
             msg: '获取邀约数据失败'
@@ -271,7 +273,7 @@ async function readAllUnreadOrder(ctx) {
             success: true
         }
     } catch (e) {
-        console.error('全部已读失败: ', e)
+        logger.error('全部已读失败: ', e)
         ctx.body = {
             success: false,
             msg: '全部已读失败'

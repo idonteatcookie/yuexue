@@ -2,6 +2,8 @@ const fs = require('fs')
 
 const userService = require('../service/user-service')
 const CustomError = require('../utils/CustomError')
+const log4js = require('../utils/logger')
+const logger = log4js.getLogger('user-controller')
 
 const TEL_REG = /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/
 
@@ -66,7 +68,7 @@ module.exports = {
             if (e instanceof CustomError) {
                 ctx.body = e.toReturnVo()
             } else {
-                console.error('创建用户出错：', e)
+                logger.error('创建用户出错：', e)
                 ctx.body = {
                     success: false,
                     msg: '注册失败'
@@ -94,7 +96,7 @@ module.exports = {
             if (e instanceof CustomError) {
                 ctx.body = e.toReturnVo()
             } else {
-                console.error('修改用户信息出错：', e)
+                logger.error('修改用户信息出错：', e)
                 ctx.body = {
                     success: false,
                     msg: '修改用户信息出现异常'
@@ -119,7 +121,7 @@ module.exports = {
         if (result) {
             // 在 session 中保存登录状态
             ctx.session.userId = result.id
-            console.log(result.username + '登录...')
+            logger.info(result.username + ' 登录...')
             ctx.body = {
                 success: true,
                 msg: '登录成功'
@@ -134,7 +136,7 @@ module.exports = {
     async logout(ctx) {
         if (ctx.session && ctx.session.userId) {
             let result = await userService.queryUserById(ctx.session.userId)
-            console.log(result.username + '登出...')
+            logger.info(result.username + '登出...')
             ctx.session = null
         }
         ctx.body = {
@@ -158,7 +160,7 @@ module.exports = {
                 data
             }
         } catch (e) {
-            console.log('获取用户信息出现异常：', e)
+            logger.error('获取用户信息出现异常：', e)
             ctx.body = {
                 success: false,
                 msg: '获取用户信息出现异常'
@@ -188,7 +190,7 @@ module.exports = {
                 msg: '上传成功'
             }
         } catch (e) {
-            console.log('上传头像失败：', e)
+            logger.error('上传头像失败：', e)
             ctx.body = {
                 success: false,
                 msg: '上传失败'
@@ -218,7 +220,7 @@ module.exports = {
             if (e instanceof CustomError) {
                 ctx.body = e.toReturnVo()
             } else {
-                console.error('重置用户密码出错：', e)
+                logger.error('重置用户密码出错：', e)
                 ctx.body = {
                     success: false,
                     msg: '重置用户密码失败'
@@ -245,7 +247,7 @@ module.exports = {
             if (e instanceof CustomError) {
                 ctx.body = e.toReturnVo()
             } else {
-                console.error('发送验证码失败：', e)
+                logger.error('发送验证码失败：', e)
                 ctx.body = {
                     success: false,
                     msg: `发送验证码失败`

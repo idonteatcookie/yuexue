@@ -5,6 +5,8 @@ const sendEmail = require('../utils/email-util')
 const { md5, getRandomString } = require('../utils')
 const CustomError = require('../utils/CustomError')
 const { getCacheItem, setCacheItem } = require('../utils/cache')
+const log4js = require('../utils/logger')
+const logger = log4js.getLogger('user-service')
 
 /**
  * 新建用户
@@ -12,6 +14,7 @@ const { getCacheItem, setCacheItem } = require('../utils/cache')
  * @returns {Promise.<*>}
  */
 async function createUser(email, password, pin) {
+    logger.info(`创建用户, email=${email}, password=${password}, pin=${pin}`)
     // 邮箱不能重复
     let result = await userModel.queryUserByEmail(email)
     if (result) {
@@ -36,6 +39,7 @@ async function createUser(email, password, pin) {
  * @returns {Promise.<*>}
  */
 async function modifyUser(user) {
+    logger.info(`修改用户信息: `, JSON.stringify(user))
     let oldUser = await userModel.queryUserById(user.id)
     if (!oldUser) {
         throw new CustomError('用户不存在')
@@ -65,7 +69,6 @@ async function modifyUser(user) {
     return userModel.updateUserById(_user)
 }
 
-
 /**
  * 通过用户名和密码获取用户
  * @param username
@@ -73,6 +76,7 @@ async function modifyUser(user) {
  * @returns {Promise.<boolean>}
  */
 async function getUser(email, password) {
+    logger.info(`获取用户: email=${email}, password=${password}`)
     let result = await userModel.queryUserByEmailAndPwd(email, md5(password))
     return result
 }
@@ -83,6 +87,7 @@ async function getUser(email, password) {
  * @returns {Promise.<*>}
  */
 async function queryUserById(userId) {
+    logger.info(`通过id查询用户信息: userId=${userId}`)
     let result = await userModel.queryUserById(userId)
     if (result) delete result.password // 不返回密码信息
     return result
@@ -94,6 +99,7 @@ async function queryUserById(userId) {
  * @returns {Promise.<TResult>}
  */
 function getUserInfo(userId) {
+    logger.info(`通过id查询用户订单信息: userId=${userId}`)
     let p1 = orderModel.findOrderByOptions({ creatorId: userId, status: orderStatus.RECEIVED_UNREAD })
     let p4 = orderModel.findOrderByOptions({ creatorId: userId, status: orderStatus.RECEIVED_READ })
     let p2 = orderModel.findOrderByOptions({ receiverId: userId })
@@ -116,6 +122,7 @@ function getUserInfo(userId) {
  * @returns {Promise.<T>}
  */
 async function resetUserPwd(email, password, pin) {
+    logger.info(`重置密码: email=${email}, password=${password}, pin=${pin}`)
     let user = await userModel.queryUserByEmail(email)
     if (!user) {
         throw new CustomError('用户不存在')
@@ -132,6 +139,7 @@ async function resetUserPwd(email, password, pin) {
  * @returns {Promise.<Promise.<T>|*>}
  */
 async function sendPinCode(email, isReset) {
+    logger.info(`发送验证码到指定邮箱: email=${email}, isReset=${isReset}`)
     if (isReset) {
         let user = await userModel.queryUserByEmail(email)
         if (!user) {

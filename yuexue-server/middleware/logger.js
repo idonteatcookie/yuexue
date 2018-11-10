@@ -1,14 +1,10 @@
+const log4js = require('../utils/logger')
+const logger = log4js.getLogger('middleware-logger')
+
 module.exports = async function (ctx, next) {
     let method = ctx.request.method
     let url = ctx.request.url
-    console.log(`\x1b[34m${new Date().toLocaleString()}\x1b[0m    --> \x1b[1m${method}\x1b[0m ${url}`)
-    if (method === 'POST') {
-        console.log(JSON.stringify(ctx.request.body))
-    }
-    if (method === 'GET') {
-        console.log(JSON.stringify(ctx.query))
-    }
+    logger.info(`--> ${method} ${url}`, method === 'POST' ? JSON.stringify(ctx.request.body) : '')
     await next()
-    console.log(`\x1b[34m${new Date().toLocaleString()}\x1b[0m    <-- \x1b[1m${method}\x1b[0m ${url}`)
-    console.log(JSON.stringify({ success: ctx.body && ctx.body.success, msg: ctx.body && ctx.body.msg }))
+    logger.info(`<-- ${method} ${url}`)
 }

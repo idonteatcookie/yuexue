@@ -2,6 +2,8 @@ const orderModel = require('../model/order-model-sqlite')
 const userModel = require('../model/user-model-sqlite')
 const { orderStatus } = require('../utils/constants')
 const CustomError = require('../utils/CustomError')
+const log4js = require('../utils/logger')
+const logger = log4js.getLogger('order-service')
 
 /**
  * 新建订单
@@ -9,6 +11,7 @@ const CustomError = require('../utils/CustomError')
  * @returns {Promise.<*>}
  */
 async function createOrder(order) {
+    logger.info('创建订单: ', JSON.stringify(order))
     let user = await userModel.queryUserById(order.creatorId)
     if (!user) {
         throw new CustomError('用户不存在')
@@ -25,6 +28,7 @@ async function createOrder(order) {
  * @returns {Promise.<boolean>}
  */
 async function updateOrder(order) {
+    logger.info('更新订单: ', JSON.stringify(order))
     let oldOrder = await orderModel.queryOrderById(order.id)
     if (!oldOrder) {
         throw new CustomError('订单不存在')
@@ -43,6 +47,7 @@ async function updateOrder(order) {
  * @returns {Promise.<boolean>}
  */
 async function receiveOrder(order) {
+    logger.info('接收订单: ', JSON.stringify(order))
     let oldOrder = await orderModel.queryOrderById(order.id)
     if (!oldOrder) {
         throw new CustomError('订单不存在')
@@ -74,6 +79,7 @@ async function receiveOrder(order) {
  * @returns {Promise.<boolean>}
  */
 async function deleteOrder(userId, orderId) {
+    logger.info(`删除订单: userId=${userId}, orderId=${orderId}`)
     let order = await orderModel.queryOrderById(orderId)
     if (!order) {
         throw new CustomError('订单不存在')
@@ -91,10 +97,12 @@ async function deleteOrder(userId, orderId) {
  * @returns {Promise.<*>}
  */
 function findOrderByOptions(options) {
+    logger.info('查询订单: ', JSON.stringify(options))
     return orderModel.findOrderByOptions(options)
 }
 
 async function findCurrentOrders(search, city, start, size) {
+    logger.info(`查询订单: search=${search}, city=${city}, start=${start}, size=${size}`)
     let options = {
         status: orderStatus.PUBLISHED_UNRECEIVED,
         city
@@ -103,6 +111,7 @@ async function findCurrentOrders(search, city, start, size) {
 }
 
 async function readAllUnreadOrder(userId) {
+    logger.info(`所有未读标记为已读: userId=${userId}`)
     let user = await userModel.queryUserById(userId)
     if (!user) {
         throw new CustomError('用户不存在')
