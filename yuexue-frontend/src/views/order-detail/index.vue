@@ -1,42 +1,44 @@
 <template>
   <div class="order-detail">
-    <mt-header fixed title="邀约详情">
-      <mt-button slot="left" icon="back" @click="back()"></mt-button>
-    </mt-header>
-    <div class="content">
-      <div class="order-title">
-        <h1 class="title">{{ order.title }}</h1>
-        <div class="base-info">
-          <span class="city">{{ order.city }}</span>
-          <span class="time">{{ getInterval(order.createTime) }}</span>
+    <div class="order-content">
+      <mt-header fixed title="邀约详情">
+        <mt-button slot="left" icon="back" @click="back()"></mt-button>
+      </mt-header>
+      <div class="content">
+        <div class="order-title">
+          <h1 class="title">{{ order.title }}</h1>
+          <div class="base-info">
+            <span class="city">{{ order.city }}</span>
+            <span class="time">{{ getInterval(order.createTime) }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <label>发起人:</label>
+          <span @click="showUserDialog(order.creatorId, isReceiver)" class="username">{{ order.creatorName }}</span>
+        </div>
+        <div class="info-item" v-if="order.status === orderStatus.RECEIVED_UNREAD || order.status === orderStatus.RECEIVED_READ">
+          <label>应邀人:</label>
+          <span @click="showUserDialog(order.receiverId, isCreator)" class="username">{{ order.receiverName }}</span>
+        </div>
+        <div class="info-item">
+          <label>时间:</label>
+          <span>{{ new Date(order.startTime).format("yyyy-MM-dd") }} ~ {{ new Date(order.endTime).format("yyyy-MM-dd") }}</span>
+        </div>
+        <div class="info-item">
+          <label>地点:</label>
+          <span>{{ order.location }}</span>
+        </div>
+        <div class="info-item">
+          <label>备注:</label>
+          <span>{{ order.remark }}</span>
         </div>
       </div>
-      <div class="info-item">
-        <label>发起人:</label>
-        <span @click="showUserDialog(order.creatorId, isReceiver)" class="username">{{ order.creatorName }}</span>
+      <div class="opt">
+        <button @click="canReceiver" v-if="order.status === 2">接受邀约</button>
+        <button v-else-if="isReceiver" class="disabled">已应邀</button>
+        <button v-else class="disabled">已有人应邀</button>
+        <button v-if="isCreator && order.status === 2" class="remove-order" @click="() => { deleteDialog = true }">删 除</button>
       </div>
-      <div class="info-item" v-if="order.status === orderStatus.RECEIVED_UNREAD || order.status === orderStatus.RECEIVED_READ">
-        <label>应邀人:</label>
-        <span @click="showUserDialog(order.receiverId, isCreator)" class="username">{{ order.receiverName }}</span>
-      </div>
-      <div class="info-item">
-        <label>时间:</label>
-        <span>{{ new Date(order.startTime).format("yyyy-MM-dd") }} ~ {{ new Date(order.endTime).format("yyyy-MM-dd") }}</span>
-      </div>
-      <div class="info-item">
-        <label>地点:</label>
-        <span>{{ order.location }}</span>
-      </div>
-      <div class="info-item">
-        <label>备注:</label>
-        <span>{{ order.remark }}</span>
-      </div>
-    </div>
-    <div class="opt">
-      <button @click="canReceiver" v-if="order.status === 2">接受邀约</button>
-      <button v-else-if="isReceiver" class="disabled">已应邀</button>
-      <button v-else class="disabled">已有人应邀</button>
-      <button v-if="isCreator && order.status === 2" class="remove-order" @click="() => { deleteDialog = true }">删 除</button>
     </div>
     <!-- 发起人详情弹出框 -->
     <Dialog class="user-info-dialog" v-show="dialogVisible">
@@ -213,6 +215,7 @@ export default {
     z-index: 100;
     background-color: $backColor;
     color: #484848;
+    overflow: scroll;
     .content {
       padding: 50px 20px;
       .order-title {

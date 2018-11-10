@@ -120,6 +120,7 @@ export default {
           this.orderList = res.data
           this.page = 1
           this.allLoaded = false
+          window.scrollTo(0, 0)
         } else {
           Toast(res.msg)
         }
@@ -143,15 +144,15 @@ export default {
       }, 1000)
     },
     onScroll() {
-      if (this.loading || this.allLoaded) return
       let top = document.documentElement.scrollTop || document.body.scrollTop // 滚动条在Y轴上的滚动距离
       let vh = document.compatMode === 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight // 浏览器视口的高度
       let height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) // 文档的总高度
-      if (top >= vh) {
+      if (top >= 50) {
         this.showToTop = true
       } else {
         this.showToTop = false
       }
+      if (this.loading || this.allLoaded) return
       if (top + vh >= height) { // 滚动到底部
         this.getNextPage() // 如果已经滚到底了 获取数据
       }
@@ -265,7 +266,7 @@ export default {
       right: 20px;
       bottom: 60px;
       i {
-        color: #9a9a9a;
+        color: rgba(1, 1, 1, 0.3);
         font-size: 32px;
         font-weight: 900;
       }
