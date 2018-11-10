@@ -23,6 +23,11 @@ const config = {
         signed: true, /** (boolean) signed or not (default true) */
         // rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
         renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
+    },
+
+    emailAuth: {
+        user: '邮箱，例如 mdzz@163.com',
+        pass: '授权码，例如 qwertyhbsdjk' // 这里密码不是 qq 密码，是你设置的 smtp 密码（授权码）
     }
 
 }
