@@ -31,8 +31,11 @@
           <li class="loading" v-if="loading && !allLoaded">加载中...</li>
         </ul>
       </div>
-      <div class="to-top">
-        <i class="iconfont icon-tabshouqi" @click="toTop"></i>
+      <div class="to-top" v-show="showToTop">
+        <i class="iconfont icon-xiangshangjiantou" @click="toTop"></i>
+      </div>
+      <div class="refresh">
+        <i class="iconfont icon-shuaxin" @click="fetch"></i>
       </div>
       <app-footer class="main-footer"></app-footer>
     </template>
@@ -77,7 +80,8 @@ export default {
           className: 'slot3',
           textAlign: 'left'
         }
-      ]
+      ],
+      showToTop: false
     }
   },
   components: {
@@ -143,6 +147,11 @@ export default {
       let top = document.documentElement.scrollTop || document.body.scrollTop // 滚动条在Y轴上的滚动距离
       let vh = document.compatMode === 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight // 浏览器视口的高度
       let height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) // 文档的总高度
+      if (top >= vh) {
+        this.showToTop = true
+      } else {
+        this.showToTop = false
+      }
       if (top + vh >= height) { // 滚动到底部
         this.getNextPage() // 如果已经滚到底了 获取数据
       }
@@ -251,15 +260,18 @@ export default {
         }
       }
     }
-    .to-top {
+    .to-top, .refresh {
       position: fixed;
       right: 20px;
       bottom: 60px;
       i {
         color: #9a9a9a;
-        background: #eee;
         font-size: 32px;
+        font-weight: 900;
       }
+    }
+    .refresh {
+      bottom: 100px;
     }
   }
 </style>
