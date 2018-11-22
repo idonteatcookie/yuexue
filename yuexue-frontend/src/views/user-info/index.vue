@@ -163,7 +163,7 @@ export default {
   @import '../../styles/variables.scss';
   .user-info {
     padding: 50px 0 50px;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 40px);
     background-color: $backColor;
     .info-list, .history-list {
       background-color: #fff;

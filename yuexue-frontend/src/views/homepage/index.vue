@@ -7,7 +7,7 @@
       </mt-button>
     </mt-header>
     <div class="text">
-      <p>欢迎! {{ userInfo.username }}</p><br>
+      <p>欢迎! <span class="user-name">{{ userInfo.username }}</span></p><br>
       <p>你已成功约学 <span class="count">{{ userInfo.ordersTotal }}</span> 次</p>
       <p>获得称号: <span class="title">{{ title }}</span></p>
     </div>
@@ -87,17 +87,22 @@ export default {
 .homepage {
   padding: 50px 0 40px;
   height: 100vh;
+  background-image: url('../../assets/study.jpg'); // 想找一个学习的壁纸没找到 我....
+  background-size: cover;
   .logo {
     height: 26px;
     margin: 12px 32px;
   }
   .text {
     height: 70%;
-    padding-top: 30%;
+    padding-top: 20vh;
     line-height: 35px;
     font-size: 22px;
     color: $themeColor;
     text-align: center;
+    .user-name {
+      font-family: KaiTiGB2312, STKaiti, "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    }
     .count {
       font-family: TrebuchetMS,Rotobo,"Microsoft YaHei",sans-serif;
     }
