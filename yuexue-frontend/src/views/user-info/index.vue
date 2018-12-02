@@ -77,6 +77,7 @@ import { gender } from '@/constant'
 import loading from '@/assets/loading.gif'
 
 export default {
+  name: 'userInfo',
   data() {
     return {
       userInfo: {},
@@ -146,13 +147,17 @@ export default {
   watch: {
     '$route': function(to, from) {
       // 如果是从父页面跳转到子页面
-      if (from.name === 'userInfo') {
+      if (from.name === 'userInfo' && (to.name === 'userOrder' || to.name === 'modifyInfo')) {
         setTimeout(() => {
           this.childView = true
         }, 300)
-      } else if (to.name === 'userInfo') {
+      } else if (to.name === 'userInfo' && (from.name === 'userOrder' || from.name === 'modifyInfo')) {
         // 跳转回父页面
         this.childView = false
+      }
+      // 如果是从修改个人信息页跳过来的 就刷新页面
+      if (from.name === 'modifyInfo') {
+        this.fetch()
       }
     }
   }

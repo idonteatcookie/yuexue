@@ -29,6 +29,7 @@ import { orderStatus } from '@/constant/index'
 import { MessageBox } from 'mint-ui'
 
 export default {
+  name: 'homepage',
   data() {
     return {
       userInfo: {},

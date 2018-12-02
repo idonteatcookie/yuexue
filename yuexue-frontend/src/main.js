@@ -12,7 +12,7 @@ import './styles/index.scss'
 Vue.config.productionTip = false
 // fastclick.attach(document.body) // 解决移动端点击延迟的问题
 
-// 全局变量 userId
+// 全局变量 user 信息
 let store = {
   user: undefined,
   loading: false,

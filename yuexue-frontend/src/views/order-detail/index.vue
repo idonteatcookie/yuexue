@@ -196,7 +196,7 @@ export default {
     getInterval
   },
   created() {
-    this.getOrderInfo().then(this.getCreator)
+    this.getOrderInfo()
   },
   components: {
     Dialog

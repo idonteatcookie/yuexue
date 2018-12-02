@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive>
+    <keep-alive include="userInfo">
       <router-view></router-view>
     </keep-alive>
     <Loading v-if="$root.$data.loading"></Loading>
