@@ -8,7 +8,6 @@ yuexue.log*
 package-lock.json
 avatar/
 !avatar/default
-yx.sqlite3
 
 # Editor directories and files
 .idea

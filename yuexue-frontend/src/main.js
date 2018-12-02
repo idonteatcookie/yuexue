@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import fastclick from 'fastclick'
+import fastclick from 'fastclick'
 
 // 引入 MintUI 组件库
 import MintUI from 'mint-ui'
@@ -10,7 +10,7 @@ import 'mint-ui/lib/style.css'
 import './styles/index.scss'
 
 Vue.config.productionTip = false
-// fastclick.attach(document.body) // 解决移动端点击延迟的问题
+fastclick.attach(document.body) // 解决移动端点击延迟的问题
 
 // 全局变量 user 信息
 let store = {

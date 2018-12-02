@@ -39,7 +39,7 @@ module.exports.order_info_ddl =
     );`
 
 module.exports.user_info_data = [
-    ['小一最酷了', 'e10adc3949ba59abbe56e057f20f883e', 'xie_ym@qq.com', 17, 'male', '13344556677', 'nottellyou', '100000', '北京市,北京市', '愿得一学霸，白首不相离，带我上自习，一日刷千题'],
+    ['小一最酷了', 'e10adc3949ba59abbe56e057f20f883e', 'xiaoyi@qq.com', 17, 'male', '13344556677', 'nottellyou', '100000', '北京市,北京市', '愿得一学霸，白首不相离，带我上自习，一日刷千题'],
     ['测试账号', 'e10adc3949ba59abbe56e057f20f883e', 'test@qq.com', 17, 'male', '13535353535', 'heiheihei', '12306', '北京市,北京市', '这是一个测试账号']
 ]
 
