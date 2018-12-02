@@ -35,8 +35,6 @@ npm install
 npm run dev
 # 生产环境压缩打包
 npm run build
-# 打包并生成分析报告
-npm run build --report
 ```
 
 ## 实现功能
