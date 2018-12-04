@@ -10,7 +10,7 @@ const getAvatar = require('./middleware/getAvatar')
 const cors = require('./middleware/cors')
 const staticPath = './static'
 
-const log4js = require('../utils/logger')
+const log4js = require('./utils/logger')
 const log = log4js.getLogger('app.js')
 
 const app = new Koa()
