@@ -131,7 +131,7 @@ export default {
     getNextPage() {
       this.loading = true
       setTimeout(() => {
-        queryCurrentOrders({ search: this.search, start: this.page * 10, size: 10 }).then(res => {
+        queryCurrentOrders({ search: this.search, start: this.orderList.length, size: 10 }).then(res => {
           if (res.success) {
             if (res.data.length === 0) this.allLoaded = true
             this.orderList = this.orderList.concat(res.data)

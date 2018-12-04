@@ -17,7 +17,7 @@ async function createOrder(order) {
         throw new CustomError('用户不存在')
     }
     order.creatorName = user.username
-    order.createTime = order.updateTime = new Date();
+    order.createTime = order.updateTime = new Date().format('yyyy-MM-dd hh:mm:ss')
     order.status = orderStatus.PUBLISHED_UNRECEIVED
     return orderModel.createOrder(order)
 }
@@ -33,7 +33,7 @@ async function updateOrder(order) {
     if (!oldOrder) {
         throw new CustomError('订单不存在')
     }
-    oldOrder.updateTime = new Date()
+    oldOrder.updateTime = new Date().format('yyyy-MM-dd hh:mm:ss')
     if (order.startTime) oldOrder.startTime = order.startTime
     if (order.endTime) oldOrder.endTime = order.endTime
     if (order.location) oldOrder.location = order.location
@@ -68,7 +68,7 @@ async function receiveOrder(order) {
     }
     oldOrder.receiverId = receiver.id
     oldOrder.receiverName = receiver.username
-    oldOrder.receiveTime = new Date()
+    oldOrder.receiveTime = new Date().format('yyyy-MM-dd hh:mm:ss')
     oldOrder.status = orderStatus.RECEIVED_UNREAD
     return orderModel.updateOrderById(oldOrder)
 }
