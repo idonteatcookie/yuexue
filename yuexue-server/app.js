@@ -10,6 +10,9 @@ const getAvatar = require('./middleware/getAvatar')
 const cors = require('./middleware/cors')
 const staticPath = './static'
 
+const log4js = require('../utils/logger')
+const log = log4js.getLogger('app.js')
+
 const app = new Koa()
 // 加密cookie的字符串
 app.keys = config.keys
@@ -31,4 +34,4 @@ app.use(getAvatar)
 app.use(routers.routes()).use(routers.allowedMethods())
 
 app.listen(config.port)
-console.log('服务启动....')
+log.info('服务启动....')
