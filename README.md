@@ -2,6 +2,8 @@
 
 一个基于 Vue & Node 的移动端全栈小项目
 
+## [在线演示（请使用移动端查看效果）](http://yuexue.tk:3001)
+
 ## 技术栈
 ```
 前端：Vue2 vue-router Webpack axios sass MintUI Iconfont
