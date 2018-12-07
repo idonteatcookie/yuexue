@@ -23,7 +23,7 @@ git clone https://github.com/G-lory/yuexue.git
 # 到后端项目
 cd yuexue-server
 # 安装依赖
-可以通过 npm install --registry=https://registry.npm.taobao.org 重新指定 registry 来解决 npm 安装速度慢的问题
+# 可以通过 npm install --registry=https://registry.npm.taobao.org 重新指定 registry 来解决 npm 安装速度慢的问题
 npm install
 # 修改 yuexue/yuexue-server/config.js 中 emailAuth 配置你自己的邮箱地址和授权码 （否则不能实现发送邮件功能
 # 运行后端项目 打开浏览器访问 http://localhost:3001 （可通过 test@qq.com/123456 直接登录
@@ -64,4 +64,4 @@ npm run build
 
 ## 项目结构
 ### [前端](https://github.com/G-lory/yuexue/blob/master/yuexue-frontend/README.md)
-### [后端](https://github.com/G-lory/yuexue/blob/master/yuexue-server/readme.md)
+### [后端](https://github.com/G-lory/yuexue/blob/master/yuexue-server/README.md)
