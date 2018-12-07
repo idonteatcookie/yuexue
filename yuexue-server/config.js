@@ -27,7 +27,7 @@ const config = {
 
     emailAuth: {
         user: '邮箱，例如 mdzz@163.com',
-        pass: '授权码，例如 qwertyhbsdjk' // 这里密码不是 qq 密码，是你设置的 smtp 密码（授权码）
+        pass: '授权码，例如 qwertyhbsdjk' // 这里密码不是邮箱密码，是 smtp 密码（授权码）
     }
 
 }

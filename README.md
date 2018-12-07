@@ -25,7 +25,8 @@ cd yuexue-server
 # 安装依赖
 可以通过 npm install --registry=https://registry.npm.taobao.org 重新指定 registry 来解决 npm 安装速度慢的问题
 npm install
-# 运行后端项目 打开浏览器访问 http://localhost:3001
+# 修改 yuexue/yuexue-server/config.js 中 emailAuth 配置你自己的邮箱地址和授权码 （否则不能实现发送邮件功能
+# 运行后端项目 打开浏览器访问 http://localhost:3001 （可通过 test@qq.com/123456 直接登录
 npm run start
 
 # 启动前端项目
